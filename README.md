@@ -8,8 +8,8 @@ bodies, commands, stdout, stderr or raw logs; a signature alone cannot re-run or
 This repository holds data only: no code, no workflows, no secrets. The single exception is the
 org audit under [`audit/`](audit/README.md), which carries its own checker and two workflows.
 
-Supports [Aienix](https://github.com/aien-dev/aienix), the core tree of AIEN. Every claim the
-project makes is meant to resolve to a bundle on this shelf.
+Supports [Sovereign Intelligence (SI)](https://github.com/aien-dev/sovereign-intelligence).
+Every claim the project makes is meant to resolve to a bundle on this shelf.
 
 **Status (2026-10-26): in use.** The first bundles were published on 2026-10-16, and
 the Spark publishes signed bundles when it verifies commits. The shelf includes
@@ -83,3 +83,16 @@ Neither a signature-only check nor a green advisory PR check replaces the full s
 ## License
 
 Apache-2.0. See `LICENSE`.
+
+## Human-Directed Agentic Engineering
+
+Current repository maintenance follows Human-Directed Agentic Engineering (HDAE):
+humans define goals, architecture, constraints, acceptance criteria, and stopping
+points; agents implement, execute checks, diagnose failures, and revise within those
+boundaries. Human review retains responsibility for claims, acceptance, and release decisions.
+
+For the documented method and a systems-software case study, see Gregory M. Kurtzer,
+[*Ginux: Building an Independent Kernel That Runs Linux Userspace through
+Human-Directed Agentic Engineering* (2026)](https://doi.org/10.5281/zenodo.23682548).
+Historical evidence retains its original wording and scope; this section does not
+retroactively characterize the method used to produce earlier records.
