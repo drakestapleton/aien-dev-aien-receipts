@@ -1,13 +1,13 @@
 # Org audit of aien-dev
 
 > "We believe that an open source community is only as open as we are, as transparent as we are.
-> Transparency will set us free." (Drake Stapleton, 2026-10-26)
+> Transparency will set us free." (the project owner, 2026-10-26)
 
 This directory publishes what has been checked in every `aien-dev` repository, what has not, and
 how anyone can re-check it. It is separate from the signed Spark bundles in the rest of this
 repository: nothing here edits or replaces a bundle.
 
-Scope and approval: Drake approved workflows for this subtree on 2026-10-26. The scope is recorded in
+Scope and approval: the owner approved workflows for this subtree on 2026-10-26. The scope is recorded in
 the ADR 0033 addendum, aien-dev/aien-architecture-mv#337. Until that addendum merges, this subtree
 is a proposal.
 
@@ -139,6 +139,22 @@ The public repository `aien` was created after this pin set; it is counted in `l
 
 Model reviews still to run are listed in the pull request that added this directory. Triage of the
 FLAGGED items is part of each stamp, not of this table.
+
+## Disclosures
+
+Problems the audit found in already-published claims. Private repositories appear by their
+`private-NN` id; historical bytes are never edited, corrections sit beside them.
+
+- 2026-10-26, private-09 (Omega evidence shelf): the historical receipts M8
+  (`omega_program_core_qualification_receipt.json`) and M9
+  (`omega_synthesis_v0_qualification_receipt.json`) say `QUALIFIED / PASS`, but their provenance
+  does not support it. Both were regenerated in omega-mv commit `469f53c1` by
+  `tests/run_m8_gates.sh` and `tests/run_m9_gates.sh`, which write a hardcoded earlier commit
+  identity; the commit M9 names does not exist in omega-mv. Disposition:
+  `REFUSED_UNSUPPORTED_PROVENANCE` for admission, recorded in adjacent `.correction.json` files
+  (M8 merged, M9 pending review). The original bytes are unchanged. Proposed upstream fix: the gate
+  scripts record `git rev-parse HEAD` of a clean tree instead of a default (NOT_RUN: no omega-mv
+  change yet).
 
 ## Live line count
 
