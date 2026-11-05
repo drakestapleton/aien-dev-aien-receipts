@@ -1,0 +1,296 @@
+{
+ "note": "Public repositories. Forks pin the upstream merge-base; only our diff is counted. A public repository missing here is still counted (or reported NOT_COUNTED) by loc_live.py.",
+ "org": "aien-dev",
+ "repositories": [
+  {
+   "kind": "FIRST-PARTY",
+   "name": ".github"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "AienOS-nv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "CUDApp"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "MojoLlama"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aegis-runtime-mv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "agent-archive"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aien-architecture-mv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aien-edge"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "aien-harness"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "aien-local-stack"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aien-protocols-mv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aien-receipts"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aien-rig"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aien-sovereign-core-mv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aien-train"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aien-translate"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "aien-yardsticks"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aienix"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aienos.com"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "aienux"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "allen"
+  },
+  {
+   "kind": "UPSTREAM-FORK",
+   "name": "arm-trusted-firmware",
+   "upstream": {
+    "base_sha": "01610b0d32d746104dd4dacf179c65d69adaaf0a",
+    "ref": "master",
+    "repository": "worproject/arm-trusted-firmware"
+   }
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "atlas"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "benchmarks-mv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "cortex"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "cortex-rs"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "crumb-spec-mv"
+  },
+  {
+   "kind": "UPSTREAM-FORK",
+   "name": "edk2",
+   "upstream": {
+    "base_sha": "d7d4f09ff815794761f84d06e307001afe6376c4",
+    "ref": "bootmanagerlib-sdmmc-desc",
+    "repository": "worproject/edk2"
+   }
+  },
+  {
+   "kind": "UPSTREAM-FORK",
+   "name": "edk2-non-osi",
+   "upstream": {
+    "base_sha": "7ac12d81e02b323bffdf1ef3c188ea33c2185c91",
+    "ref": "master",
+    "repository": "tianocore/edk2-non-osi"
+   }
+  },
+  {
+   "kind": "UPSTREAM-FORK",
+   "name": "edk2-platforms",
+   "upstream": {
+    "base_sha": "8e1779b538bcc1e6dc68d7df625394f933651d7a",
+    "ref": "rpi5-dev",
+    "repository": "worproject/edk2-platforms"
+   }
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "encounter"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "harvester"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "interplane-mv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "interplane.io"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "mobhub"
+  },
+  {
+   "kind": "UPSTREAM-FORK",
+   "name": "odysseus",
+   "upstream": {
+    "base_sha": "a8c147b238db01dbd00b57774ed8b453f1e43971",
+    "ref": "codex/review-7011-editor-server-20261015",
+    "repository": "odysseus-dev/odysseus"
+   }
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "omega-bridge"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "omega-harness"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "omega-mv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "omega-projects"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "omnet"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "omtex"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "open-humanity"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "physics-mv"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "physics0"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "pi-register"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "rad-id-sync"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "readings-window"
+  },
+  {
+   "kind": "UPSTREAM-FORK",
+   "name": "rpi5-uefi",
+   "upstream": {
+    "base_sha": "a6135b06d661b5f11bbf4bd742b42a1919b264dc",
+    "ref": "master",
+    "repository": "worproject/rpi5-uefi"
+   }
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "sovereign-intelligence"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "spark-adapters"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "spark-connector"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "spark-crumbs-mv"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "spark-debugger"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "spark-dream"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "spark-hive"
+  },
+  {
+   "kind": "ARCHIVED",
+   "name": "spark-inquisitor"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "spark-rsi-mv"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "spark-supervisor"
+  },
+  {
+   "kind": "FIRST-PARTY",
+   "name": "synapse"
+  },
+  {
+   "kind": "UPSTREAM-FORK",
+   "name": "t3code",
+   "upstream": {
+    "base_sha": "98a6246d07624432a6e6d0ab4fb87bede90a49a6",
+    "ref": "batch-07-pr-media/context",
+    "repository": "pingdotgg/t3code"
+   }
+  },
+  {
+   "kind": "UPSTREAM-FORK",
+   "name": "translate",
+   "upstream": {
+    "base_sha": "df9d77c85399470d10e2cb610f17e294ac107740",
+    "ref": "master",
+    "repository": "xnx3/translate"
+   }
+  }
+ ],
+ "scc_version": "4.1.0",
+ "schema": "aien-audit-loc-repos/1"
+}

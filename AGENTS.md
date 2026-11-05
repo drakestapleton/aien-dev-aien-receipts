@@ -1,6 +1,6 @@
 # aien-receipts (append-only shelf of signed AIEN verification bundles)
 
-> Data-only repository. When the Spark judge (the verification pipeline on the project's NVIDIA DGX Spark) checks a commit of an `aien-dev` repository, it signs the result and publishes it here as `<repo>/<sha>/bundle.json`. Consuming repositories verify a bundle with `aien-test verify-bundle` against the public key and gate list on their own base branch. There is no code, no build and no workflow in this repository.
+> Data-only repository. When the Spark judge (the verification pipeline on the project's NVIDIA DGX Spark) checks a commit of an `aien-dev` repository, it signs the result and publishes it here as `<repo>/<sha>/bundle.json`. Consuming repositories verify a bundle with `aien-test verify-bundle` against the public key and gate list on their own base branch. Bundles have no code, no build and no workflow. The one exception is the org audit under `audit/` (see below).
 
 Shared rules: read https://www.aienos.com/agents/RULES.md first. This file adds what is specific to this repository; where the two differ, this file wins here.
 
@@ -39,7 +39,7 @@ To verify a bundle, follow `docs/verify-one-bundle.md`: it clones the shelf, the
 
 - Append only. A bundle for a given `<repo>/<sha>` is published once and never rewritten. This is a convention: the `main` ruleset blocks force pushes and branch deletion, not edits.
 - A new verification of the same commit must carry the same bytes.
-- No workflows run here. Do not add `.github/workflows` or any other CI.
+- Workflows are allowed only for the org audit under `audit/`: `.github/workflows/audit-attest.yml` (signs stamps) and `.github/workflows/audit-refresh.yml` (marks stamps STALE, recounts lines of code). The owner approved this on 2026-10-26; the scope is recorded in the ADR 0033 addendum (aien-dev/aien-architecture-mv#337). No other workflow or CI may be added, and no workflow may touch a bundle. The refresh job writes only `audit/status.json`, `audit/loc/latest.json` and `audit/loc/history.jsonl`. Read `audit/README.md` before changing anything under `audit/`.
 - When reasoning about a bundle, use the trust anchors from the consuming repository's base branch. Never use a key that appears only inside a bundle.
 - The verdict of record is the Spark's commit status `AIEN Verification (Spark)`. A hosted check named `AIEN Verification` only bridges to it; green there means the bridge ran, not that the commit passed. A valid signature authenticates the recorded statement, not the correctness or sufficiency of the tests behind it.
 - When citing a bundle in a claim, quote its path and the `backend` of its checks. A `host` backend means the gate ran on the host, not on the GPU.

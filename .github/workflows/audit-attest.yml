@@ -1,0 +1,81 @@
+# Org audit stamps: re-check every new stamp on a GitHub-hosted runner, then sign it.
+# Scope (ADR 0033 addendum, aien-dev/aien-architecture-mv#337): runs only for audit/stamps/**.
+# A stamp is attested only when stamp.py validates it and, for public repositories,
+# verify.py reproduces every reproducible check output byte for byte at the stamped commit.
+name: audit-attest
+
+on:
+  push:
+    branches: [main]
+    paths: ["audit/stamps/**"]
+
+permissions: {}
+
+concurrency:
+  group: audit-attest
+  cancel-in-progress: false
+
+jobs:
+  attest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      id-token: write       # Sigstore signing identity for the attestation
+      attestations: write   # store the attestation on this repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Install pinned tools (sha256-checked against audit/tools/tools.lock.json)
+        run: python3 audit/tools/install_tools.py "$RUNNER_TEMP/tools"
+      - name: Tests
+        run: python3 -m unittest discover -s audit/tests
+        env:
+          AUDIT_TOOLS: ${{ runner.temp }}/tools
+      - name: Re-check new stamps
+        id: check
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          AUDIT_TOOLS: ${{ runner.temp }}/tools
+        run: |
+          set -euo pipefail
+          git diff --name-only --diff-filter=AM "$BEFORE" "$AFTER" -- audit/stamps \
+            | awk -F/ 'NF >= 5 { print $1 "/" $2 "/" $3 "/" $4 }' | sort -u > "$RUNNER_TEMP/stamps.txt"
+          : > "$RUNNER_TEMP/subjects.txt"
+          while read -r d; do
+            [ -f "$d/stamp.json" ] || { echo "::error::$d has files but no stamp.json"; exit 1; }
+            vis=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["subject"]["visibility"])' "$d/stamp.json")
+            if [ "$vis" = public ]; then
+              repo=$(basename "$(dirname "$d")"); sha=$(basename "$d")
+              gd="$RUNNER_TEMP/src/$repo"
+              git init -q "$gd"
+              git -C "$gd" fetch -q "https://github.com/${GITHUB_REPOSITORY_OWNER}/$repo" "$sha"
+              git -C "$gd" worktree add -q --detach "$gd-wt" "$sha"
+              python3 audit/tools/verify.py "$d" --rerun "$gd" --worktree "$gd-wt" --tools "$AUDIT_TOOLS"
+            else
+              # private: nobody outside can re-run it; validated and signed as self-reported
+              python3 audit/tools/verify.py "$d"
+            fi
+            find "$d" -type f | sort >> "$RUNNER_TEMP/subjects.txt"
+          done < "$RUNNER_TEMP/stamps.txt"
+          if [ -s "$RUNNER_TEMP/subjects.txt" ]; then
+            echo "any=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "any=false" >> "$GITHUB_OUTPUT"
+          fi
+          {
+            echo "subjects<<EOF"
+            cat "$RUNNER_TEMP/subjects.txt"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: Sign
+        if: steps.check.outputs.any == 'true'
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: ${{ steps.check.outputs.subjects }}

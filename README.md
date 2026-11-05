@@ -5,7 +5,8 @@ verification pipeline on the project's NVIDIA DGX Spark) checks a commit, it sig
 publishes that bundle here. Readers can verify its signature, commit binding, declared gate
 verdicts and receipt digests. This shelf does **not** contain the underlying per-gate receipt
 bodies, commands, stdout, stderr or raw logs; a signature alone cannot re-run or audit the tests.
-This repository holds data only: no code, no workflows, no secrets.
+This repository holds data only: no code, no workflows, no secrets. The single exception is the
+org audit under [`audit/`](audit/README.md), which carries its own checker and two workflows.
 
 Supports [Sovereign Intelligence (SI)](https://github.com/aien-dev/sovereign-intelligence).
 Every claim the project makes is meant to resolve to a bundle on this shelf.
@@ -74,7 +75,8 @@ Neither a signature-only check nor a green advisory PR check replaces the full s
 - Append only (a convention: the branch has no protection rule that enforces it). A bundle for a
   given `<repo>/<sha>` is published once and never rewritten.
   A new verification of the same commit is a new commit here that must carry the same bytes.
-- No workflows run in this repository.
+- No workflows run on the bundles. The only workflows are the two org-audit jobs scoped to
+  `audit/` (approved by the owner on 2026-10-26; ADR 0033 addendum, aien-dev/aien-architecture-mv#337).
 - Published by the AIEN verification pipeline on the DGX Spark; see the `aien-architecture`
   repository for the pipeline doctrine (ADR 0033, manifest v2).
 

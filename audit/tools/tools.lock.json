@@ -1,0 +1,54 @@
+{
+  "schema": "aien-audit-tools-lock/1",
+  "note": "Every deterministic check runs only with these tool versions. checks.py refuses (NOT_RUN) when the version printed by a tool does not contain `version`. Download sha256 values are the publishers' own checksum files.",
+  "tools": {
+    "gitleaks": {
+      "version": "8.30.1",
+      "version_cmd": ["version"],
+      "downloads": {
+        "linux_amd64": {"url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz", "sha256": "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb", "member": "gitleaks"},
+        "linux_arm64": {"url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_arm64.tar.gz", "sha256": "e4a487ee7ccd7d3a7f7ec08657610aa3606637dab924210b3aee62570fb4b080", "member": "gitleaks"}
+      }
+    },
+    "scc": {
+      "version": "4.1.0",
+      "version_cmd": ["--version"],
+      "downloads": {
+        "linux_amd64": {"url": "https://github.com/boyter/scc/releases/download/v4.1.0/scc_Linux_x86_64.tar.gz", "sha256": "c7328436d3027f4357d3d7853f7dc3ac2bbcb4ca08f1adad91a27c593884079b", "member": "scc"},
+        "linux_arm64": {"url": "https://github.com/boyter/scc/releases/download/v4.1.0/scc_Linux_arm64.tar.gz", "sha256": "6e0d2a1f8d3540ba7df185477dec40bb7340f1b214bfd303147de5cad2bd7b8b", "member": "scc"}
+      }
+    },
+    "actionlint": {
+      "version": "1.7.12",
+      "version_cmd": ["-version"],
+      "downloads": {
+        "linux_amd64": {"url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz", "sha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8", "member": "actionlint"},
+        "linux_arm64": {"url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_arm64.tar.gz", "sha256": "325e971b6ba9bfa504672e29be93c24981eeb1c07576d730e9f7c8805afff0c6", "member": "actionlint"}
+      }
+    },
+    "osv-scanner": {
+      "version": "2.7.0",
+      "version_cmd": ["--version"],
+      "downloads": {
+        "linux_amd64": {"url": "https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_linux_amd64", "sha256": "160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b"},
+        "linux_arm64": {"url": "https://github.com/google/osv-scanner/releases/download/v2.7.0/osv-scanner_linux_arm64", "sha256": "4061ef4c021ed3c47f203b818f337e351336cc5cd67c0274fc36bd1dfc728dd7"}
+      }
+    },
+    "venv/bin/semgrep": {"version": "1.182.1", "version_cmd": ["--version"], "pip": "semgrep==1.182.1"},
+    "venv/bin/zizmor": {"version": "1.31.1", "version_cmd": ["--version"], "pip": "zizmor==1.31.1"}
+  },
+  "semgrep_rules": {
+    "repository": "https://github.com/semgrep/semgrep-rules",
+    "commit": "16b9e6d45f10649f6a531ec4838ed9924372c3bc",
+    "directories": ["bash", "c", "python", "javascript", "typescript", "rust", "dockerfile", "yaml/github-actions", "generic/secrets", "generic/ci"],
+    "severities": ["ERROR", "WARNING"],
+    "pyyaml": "6.0.2",
+    "config_sha256": "8d5bfd8c428cb71859540801b42377e65cca661db45c6722c19b9dc1b3791225"
+  },
+  "crumb": {
+    "repository": "https://github.com/aien-dev/aien-architecture-mv",
+    "commit": "c461b430a1598de8e673620935a3584ea91fa9c0",
+    "source": "tools/crumb/crumb.c",
+    "source_sha256": "3cab424b076134715000e66111709cbc7632d1fc5907cf87626c3e2641f7b0b7"
+  }
+}

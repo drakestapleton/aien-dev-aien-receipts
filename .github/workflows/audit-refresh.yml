@@ -1,0 +1,72 @@
+# Org audit refresh: mark stamps STALE when a repository's default-branch HEAD moves past the
+# stamped commit, and recount the public lines of code at every HEAD.
+# Scope (ADR 0033 addendum, aien-dev/aien-architecture-mv#337): this job may change exactly
+# audit/status.json, audit/loc/latest.json and audit/loc/history.jsonl; it fails without
+# pushing if anything else changed. Existing receipt bundles are never touched.
+name: audit-refresh
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: audit-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: write   # push the three mutable audit files to main
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Install pinned scc (sha256-checked against audit/tools/tools.lock.json)
+        run: python3 audit/tools/install_tools.py "$RUNNER_TEMP/tools" --only scc
+      - name: Stamp status
+        run: |
+          set -uo pipefail
+          python3 audit/tools/status.py audit/stamps --out audit/status.json --org "$GITHUB_REPOSITORY_OWNER"
+          rc=$?
+          # 3 = some HEAD could not be read; those rows say UNKNOWN, which is still worth publishing
+          [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ] || exit "$rc"
+      - name: Live line count
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -uo pipefail
+          python3 audit/tools/loc_live.py --config audit/loc/repos.json --tools "$RUNNER_TEMP/tools" \
+            --latest audit/loc/latest.json --history audit/loc/history.jsonl
+          rc=$?
+          # 3 = some repository NOT_COUNTED; latest.json lists it with the reason
+          [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ] || exit "$rc"
+      - name: Refuse changes outside the three mutable files
+        run: |
+          set -euo pipefail
+          git status --porcelain --untracked-files=all | cut -c4- | sort > "$RUNNER_TEMP/changed.txt"
+          printf '%s\n' audit/loc/history.jsonl audit/loc/latest.json audit/status.json > "$RUNNER_TEMP/allowed.txt"
+          extra=$(comm -23 "$RUNNER_TEMP/changed.txt" "$RUNNER_TEMP/allowed.txt")
+          if [ -n "$extra" ]; then
+            echo "::error::refresh touched files outside its scope:"; echo "$extra"; exit 1
+          fi
+      - name: Commit and push
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then echo "no change"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audit/status.json audit/loc/latest.json audit/loc/history.jsonl
+          git commit -q -m "audit: refresh stamp status and live line count"
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+          git -c http.extraheader="AUTHORIZATION: basic $auth" push origin HEAD:main
