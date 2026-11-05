@@ -1,0 +1,49 @@
+omc sha256 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+sha2.om sha256 5cf0f98116def6917d3a373f2bd4c3932d46e3ff84d9567bbae9e720366fdb33
+hkdf.om sha256 5c3ce5f67627f89ce42961c3076c556d16a2eb6c72d704ff68e13b2819333778
+drbg.om sha256 3d5f866a6d1b55cb350d28a5927132031cae819f59dbeb3d53cddaa6e94db0e5
+x25519.om sha256 c2a3a01d6cffff95cbaa130a586ca8f7365fb56c67ec1b2f4920eceebfed23f5
+chacha.om sha256 8431257bc8e83474983c572cfdfa7f8f4b62a1b867748868e88fbc9c1b37d3af
+aesgcm.om sha256 b19d8ce88fc65eb0e69e51f52f3af70b9c46c4bfbbc84004d43e536bf4ced17f
+ec.om sha256 909f37c797e187bd0663bde9f57c75d6ce41eb2c9726a6b50d6fc714e424c060
+ecdh.om sha256 e2784e59f47e2ad0e4ad17c063b3fa3712c00b6a5d01d1821e7801a22ece09e7
+rsa.om sha256 07414c1104f73f3f0d815ce8a7af9e736233c633f4a2ea080e20307ea1919c11
+x509.om sha256 193a8cd93638d85e4256d4d298ea00bb1c60d9e154efe81dd2f88827f093f8be
+fips.om sha256 cc855dc4739928aed47cd3dafe70ed0a59108ae3ef7ee54b3ca93993efa89a15
+tls.om sha256 9280b371674cd29161920608c1b2fa297dd6f7012e0750c265ac814aaffe1ab4
+PASS driver: fips driver: 49 checks, 0 failed
+PASS driver drbgerr: fips driver: 50 checks, 0 failed
+PASS driver ecgenerr: fips driver: 52 checks, 0 failed
+PASS kat-mutant FKS256: REFUSED detail 1, connect/seal/open refused
+PASS kat-mutant FKS384: REFUSED detail 2, connect/seal/open refused
+PASS kat-mutant FKS512: REFUSED detail 3, connect/seal/open refused
+PASS kat-mutant FKH256: REFUSED detail 4, connect/seal/open refused
+PASS kat-mutant FKH384: REFUSED detail 5, connect/seal/open refused
+PASS kat-mutant FKHO: REFUSED detail 6, connect/seal/open refused
+PASS kat-mutant FKGC: REFUSED detail 7, connect/seal/open refused
+PASS kat-mutant FKED: REFUSED detail 9, connect/seal/open refused
+PASS kat-mutant FKR1S: REFUSED detail 10, connect/seal/open refused
+PASS kat-mutant FKR2S: REFUSED detail 11, connect/seal/open refused
+PASS kat-mutant FKCC: REFUSED detail 12, connect/seal/open refused
+PASS kat-mutant FKXO: REFUSED detail 13, connect/seal/open refused
+PASS kat-mutant FKDR: REFUSED detail 14, connect/seal/open refused
+PASS kat-mutant FKTD: REFUSED detail 15, connect/seal/open refused
+PASS code-mutant sha256-k0: REFUSED detail 1
+PASS code-mutant drbg-stuck-v: REFUSED detail 14
+PASS code-mutant x25519-a24: REFUSED detail 13
+PASS code-mutant gcm-no-decrypt: REFUSED detail 8
+PASS code-mutant rct-cutoff: FAIL check 21
+PASS code-mutant apt-cutoff: FAIL check 24
+PASS code-mutant apt-window: FAIL check 24
+PASS code-mutant ht-unused: FAIL check 15
+PASS code-mutant pct-nocompare: FAIL check 70
+PASS code-mutant latch-keep: FAIL check 60
+PASS code-mutant pr-no-reseed: FAIL check 36
+PASS code-mutant connect-hook: FAIL check 62
+PASS code-mutant seal-refuse: FAIL check 65
+PASS code-mutant open-refuse: FAIL check 66
+PASS code-mutant wipe-drbg: FAIL check 58
+PASS code-mutant rand-approved: FAIL check 57
+PASS code-mutant ecgen-getrandom: FAIL check 45
+PASS code-mutant ecgen-nolatch: FAIL check 71
+FIPS PASS checks=49 drbgerr=50 ecgenerr=52 kat-mutants=14/14 code-mutants=18/18

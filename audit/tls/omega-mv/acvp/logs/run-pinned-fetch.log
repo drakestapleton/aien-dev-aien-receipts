@@ -1,0 +1,49 @@
+ACVP inputs: ACVP-Server 975de31eb83d87039ec88934fdc47d8c312b892d, 47 files match acvp-inputs.sha256
+ACVP SHA2-256-1.0 PASS tests=517 not_applicable=0
+ACVP SHA2-256-1.0 negative control FAIL as required: ACVP SHA2-256-1.0 FAIL tests=516 fail=1 not_applicable=0
+ACVP SHA2-384-1.0 PASS tests=137 not_applicable=892
+ACVP SHA2-384-1.0 negative control FAIL as required: ACVP SHA2-384-1.0 FAIL tests=136 fail=1 not_applicable=892
+ACVP SHA2-512-1.0 PASS tests=1029 not_applicable=0
+ACVP SHA2-512-1.0 negative control FAIL as required: ACVP SHA2-512-1.0 FAIL tests=1028 fail=1 not_applicable=0
+ACVP HMAC-SHA2-256-1.0 PASS tests=975 not_applicable=0
+ACVP HMAC-SHA2-256-1.0 negative control FAIL as required: ACVP HMAC-SHA2-256-1.0 FAIL tests=974 fail=1 not_applicable=0
+ACVP HMAC-SHA2-384-1.0 PASS tests=975 not_applicable=0
+ACVP HMAC-SHA2-384-1.0 negative control FAIL as required: ACVP HMAC-SHA2-384-1.0 FAIL tests=974 fail=1 not_applicable=0
+ACVP HMAC-SHA2-512-1.0 PASS tests=975 not_applicable=0
+ACVP HMAC-SHA2-512-1.0 negative control FAIL as required: ACVP HMAC-SHA2-512-1.0 FAIL tests=974 fail=1 not_applicable=0
+ACVP HMAC-SHA2-256-2.0 PASS tests=150 not_applicable=0
+ACVP HMAC-SHA2-256-2.0 negative control FAIL as required: ACVP HMAC-SHA2-256-2.0 FAIL tests=149 fail=1 not_applicable=0
+ACVP HMAC-SHA2-384-2.0 PASS tests=150 not_applicable=0
+ACVP HMAC-SHA2-384-2.0 negative control FAIL as required: ACVP HMAC-SHA2-384-2.0 FAIL tests=149 fail=1 not_applicable=0
+ACVP HMAC-SHA2-512-2.0 PASS tests=150 not_applicable=0
+ACVP HMAC-SHA2-512-2.0 negative control FAIL as required: ACVP HMAC-SHA2-512-2.0 FAIL tests=149 fail=1 not_applicable=0
+ACVP ACVP-AES-GCM-1.0 PASS tests=60 not_applicable=0
+ACVP ACVP-AES-GCM-1.0 negative control FAIL as required: ACVP ACVP-AES-GCM-1.0 FAIL tests=59 fail=1 not_applicable=0
+ACVP ACVP-AES-ECB-1.0 PASS tests=1072 not_applicable=1072
+ACVP ACVP-AES-ECB-1.0 negative control FAIL as required: ACVP ACVP-AES-ECB-1.0 FAIL tests=1071 fail=1 not_applicable=1072
+ACVP ECDSA-SigVer-1.0 PASS tests=42 not_applicable=2268
+ACVP ECDSA-SigVer-1.0 negative control FAIL as required: ACVP ECDSA-SigVer-1.0 FAIL tests=41 fail=1 not_applicable=2268
+ACVP ECDSA-SigVer-FIPS186-5 PASS tests=28 not_applicable=168
+ACVP ECDSA-SigVer-FIPS186-5 negative control FAIL as required: ACVP ECDSA-SigVer-FIPS186-5 FAIL tests=27 fail=1 not_applicable=168
+ACVP RSA-SigVer-FIPS186-4 NOT_APPLICABLE tests=0 not_applicable=432 (reasons in RSA-SigVer-FIPS186-4.map.json)
+ACVP RSA-SigVer-FIPS186-5 PASS tests=108 not_applicable=162
+ACVP RSA-SigVer-FIPS186-5 negative control FAIL as required: ACVP RSA-SigVer-FIPS186-5 FAIL tests=107 fail=1 not_applicable=162
+ACVP KDA-HKDF-Sp800-56Cr1 PASS tests=300 not_applicable=700
+ACVP KDA-HKDF-Sp800-56Cr1 negative control FAIL as required: ACVP KDA-HKDF-Sp800-56Cr1 FAIL tests=299 fail=1 not_applicable=700
+ACVP KDA-HKDF-Sp800-56Cr2 PASS tests=600 not_applicable=1400
+ACVP KDA-HKDF-Sp800-56Cr2 negative control FAIL as required: ACVP KDA-HKDF-Sp800-56Cr2 FAIL tests=599 fail=1 not_applicable=1400
+ACVP TLS-v1.3-KDF-RFC8446 PASS tests=250 not_applicable=0
+ACVP TLS-v1.3-KDF-RFC8446 negative control FAIL as required: ACVP TLS-v1.3-KDF-RFC8446 FAIL tests=249 fail=1 not_applicable=0
+ACVP XECDH-SSC-RFC7748 PASS tests=25 not_applicable=25
+ACVP XECDH-SSC-RFC7748 negative control FAIL as required: ACVP XECDH-SSC-RFC7748 FAIL tests=24 fail=1 not_applicable=25
+ACVP KAS-ECC-SSC-Sp800-56Ar3 NOT_APPLICABLE tests=0 not_applicable=20 (reasons in KAS-ECC-SSC-Sp800-56Ar3.map.json)
+ACVP TLS-v1.3-KDF-RFC8446-native(tls.om) PASS tests=25 not_applicable=0
+ACVP ML-KEM sources: 328f86e4f4f1e69faef8399dec704398583c830eedb7ea02d8e77afd1e13c56d  sha3.om 04297d84e5d9c7d24a0b29aa1c1a4a57836780f894838ed9f3740fdba720890c  mlkem.om 
+ACVP ML-KEM-keyGen-FIPS203 PASS tests=25 not_applicable=50
+ACVP ML-KEM-keyGen-FIPS203 negative control FAIL as required: ACVP ML-KEM-keyGen-FIPS203 FAIL tests=24 fail=1 not_applicable=50
+ACVP ML-KEM-encapDecap-FIPS203 PASS tests=55 not_applicable=110
+ACVP ML-KEM-encapDecap-FIPS203 negative control FAIL as required: ACVP ML-KEM-encapDecap-FIPS203 FAIL tests=54 fail=1 not_applicable=110
+ACVP hmacDRBG (om/tls/test/drbg/run.sh in /tmp/tlsproof/fipsmodule/src) DRBG PASS vectors=810 (acvp=90, cavp=720) api=23 mutants=13/13
+NONFIPS CHACHA PASS vectors=3087 (wycheproof=339) mutants=5/5
+NONFIPS X25519 PASS vectors=531 (wycheproof=518) mutants=7/7
+ACVP PASS algos=21 tests=7623 not_applicable=7299 not_run=NONE

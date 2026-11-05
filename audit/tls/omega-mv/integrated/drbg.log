@@ -1,0 +1,23 @@
+omc     sha256 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+sha2.om sha256 5cf0f98116def6917d3a373f2bd4c3932d46e3ff84d9567bbae9e720366fdb33
+hkdf.om sha256 5c3ce5f67627f89ce42961c3076c556d16a2eb6c72d704ff68e13b2819333778
+drbg.om sha256 3d5f866a6d1b55cb350d28a5927132031cae819f59dbeb3d53cddaa6e94db0e5
+acvp.txt sha256 a9589fc54a20b96d4da0012ec7e84242c686424d247e771b10ab0591cbc8b607
+cavp.txt sha256 472e4864f23806094851db9b81af6f6c3faeaa8401c49bd14705417fce844dad
+PASS acvp: drbg driver: 180 checks, 0 failed
+PASS cavp: drbg driver: 1440 checks, 0 failed
+PASS api: drbg driver: 23 checks, 0 failed
+PASS mutant-upd-one-round: detected (90 failure lines; drbg driver: 180 checks, 90 failed)
+PASS mutant-upd-sep-byte: detected (720 failure lines; drbg driver: 1440 checks, 720 failed)
+PASS mutant-inst-v-init: detected (720 failure lines; drbg driver: 1440 checks, 720 failed)
+PASS mutant-gen-no-final-update: detected (720 failure lines; drbg driver: 1440 checks, 720 failed)
+PASS mutant-gen-no-ad-update: detected (45 failure lines; drbg driver: 180 checks, 45 failed)
+PASS mutant-ctr-frozen: detected (2 failure lines; drbg driver: 23 checks, 2 failed)
+PASS mutant-limit-off: detected (2 failure lines; drbg driver: 23 checks, 2 failed)
+PASS mutant-short-seed: detected (1 failure lines; drbg driver: 23 checks, 1 failed)
+PASS mutant-big-request: detected (1 failure lines; drbg driver: 23 checks, 1 failed)
+PASS mutant-wipe-partial: detected (2 failure lines; drbg driver: 23 checks, 2 failed)
+PASS mutant-stuck-v: detected (180 failure lines; drbg driver: 180 checks, 90 failed)
+PASS mutant-expect: detected (1 failure lines; drbg driver: 1440 checks, 1 failed)
+PASS neg-malformed: detected (1 failure lines; drbg driver: 1 checks, 1 failed)
+DRBG PASS vectors=810 (acvp=90, cavp=720) api=23 mutants=13/13

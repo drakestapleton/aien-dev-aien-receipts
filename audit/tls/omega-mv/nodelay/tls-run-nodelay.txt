@@ -1,0 +1,1 @@
+TLS PASS vectors=24 (rfc8448) dns=23 dit=1 interop=44 residue=PASS net=NOT_RUN mutants=27/27  (tree /tmp/tlsproof/src = 2d613b2d + tls-nodelay.diff, omc 2c824805, 2026-10-26T21:54:55Z)

@@ -1,0 +1,53 @@
+Opening file: 'restart.bin' (SHA-256 hash e4076bd59915bb5e39402794b718cfd5a75890b00d15bfa7a9ee377d7c8c6e1f)
+Loaded 1000000 samples made up of 256 distinct 8-bit-wide symbols.
+H_I: 7.182711
+ALPHA: 5.0251553006530614e-06, X_cutoff: 25
+X_max: 16
+
+Restart Sanity Check Passed...
+Calculating baseline statistics...
+
+Running non-IID tests...
+
+Running Most Common Value Estimate...
+Literal MCV Estimate: mode = 4064, p-hat = 0.0040639999999999999, p_u = 0.0042278739273099953
+	Most Common Value Estimate (Rows) = 7.885852 / 8 bit(s)
+Literal MCV Estimate: mode = 4064, p-hat = 0.0040639999999999999, p_u = 0.0042278739273099953
+	Most Common Value Estimate (Cols) = 7.885852 / 8 bit(s)
+
+Running Tuple Estimates...
+Literal t-Tuple Estimate: t = 2, p-hat_max = 0.006000003000002250001875, p_u = 0.00619892655960472970657
+Literal LRS Estimate: u = 3, v = 5, p-hat = 0.0052530650643376779, p_u = 0.0054392651993506999
+Literal t-Tuple Estimate: t = 1, p-hat_max = 0.004064, p_u = 0.004227873927309995601935
+Literal LRS Estimate: u = 2, v = 4, p-hat = 0.0039091675347239633, p_u = 0.0040699019630508322
+	T-Tuple Test Estimate (Rows) = 7.333766 / 8 bit(s)
+	T-Tuple Test Estimate (Cols) = 7.885852 / 8 bit(s)
+	LRS Test Estimate (Rows) = 7.522373 / 8 bit(s)
+	LRS Test Estimate (Cols) = 7.940790 / 8 bit(s)
+
+Running Predictor Estimates...
+Literal MultiMCW Prediction Estimate: N = 999937, Pglobal' = 0.0041046843132270623 (C = 3943) Plocal = 0.010038011154133327 (r = 4)
+	Multi Most Common in Window (MultiMCW) Prediction Test Estimate (Rows) = 6.638383 / 8 bit(s)
+Literal MultiMCW Prediction Estimate: N = 999937, Pglobal' = 0.0040373286578181365 (C = 3877) Plocal can't affect result (r = 3)
+	Multi Most Common in Window (MultiMCW) Prediction Test Estimate (Cols) = 7.952383 / 8 bit(s)
+Literal Lag Prediction Estimate: N = 999999, Pglobal' = 0.0040799397289228954 (C = 3919) Plocal = 0.010037855165312005 (r = 4)
+	Lag Prediction Test Estimate (Rows) = 6.638405 / 8 bit(s)
+Literal Lag Prediction Estimate: N = 999999, Pglobal' = 0.0041880931081272306 (C = 4025) Plocal can't affect result (r = 3)
+	Lag Prediction Test Estimate (Cols) = 7.899491 / 8 bit(s)
+Literal MultiMMC Prediction Estimate: N = 999998, Pglobal' = 0.0040799438085542695 (C = 3919) Plocal can't affect result (r = 3)
+	Multi Markov Model with Counting (MultiMMC) Prediction Test Estimate (Rows) = 7.937235 / 8 bit(s)
+Literal MultiMMC Prediction Estimate: N = 999998, Pglobal' = 0.0040615752078357785 (C = 3901) Plocal can't affect result (r = 3)
+	Multi Markov Model with Counting (MultiMMC) Prediction Test Estimate (Cols) = 7.943745 / 8 bit(s)
+Literal LZ78Y Prediction Estimate: N = 999983, Pglobal' = 0.0040820459373360467 (C = 3921) Plocal can't affect result (r = 3)
+	LZ78Y Prediction Test Estimate (Rows) = 7.936492 / 8 bit(s)
+Literal LZ78Y Prediction Estimate: N = 999983, Pglobal' = 0.0040616361277844605 (C = 3901) Plocal can't affect result (r = 3)
+	LZ78Y Prediction Test Estimate (Cols) = 7.943723 / 8 bit(s)
+
+H_r: 6.638383
+H_c: 7.885852
+H_I: 7.182711
+
+Validation Test Passed...
+
+min(H_r, H_c, H_I): 6.638383
+

@@ -1,0 +1,20 @@
+omc     sha256 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+library sha256 8431257bc8e83474983c572cfdfa7f8f4b62a1b867748868e88fbc9c1b37d3af
+driver  sha256 1130187a2edc36c4b12fbafbe7295a61cbb184fe62891427fdcc0728737dba00
+PASS rfc8439: chacha driver: 36 checks, 0 failed
+PASS wycheproof-regenerate: committed conversions equal a fresh conversion at d17cc89fa5c8f4f4d378b5385ebf75da5d0926c9
+PASS wycheproof-chacha20-poly1305: chacha driver: 325 checks, 0 failed
+PASS wycheproof-chacha20-counter: chacha driver: 14 checks, 0 failed
+NOTE wycheproof chacha20_poly1305_test.json: expected codes 0:256 1:60 2:9; NOT_RUN 0 (0 valid sealed+opened, 1 invalid tag refused, 2 invalid nonce size refused; no acceptable)
+NOTE wycheproof chacha20_counter_test.json: expected codes 0:11 2:3; NOT_RUN 28 (NOT_RUN = XChaCha20 groups, not implemented)
+PASS cryptography-diff(seed 1): chacha driver: 2709 checks, 0 failed
+PASS tamper-refused: chacha driver: 3 checks, 0 failed
+PASS tamper-claimed-valid: 3 of 3 tampered records rejected
+PASS mutant-expectation: detected, exit 1, 1 MISMATCH (chacha driver: 36 checks, 1 failed)
+PASS mutant-qr-rotation: detected, exit 1, 278 MISMATCH (chacha driver: 361 checks, 278 failed)
+PASS mutant-poly-clamp: detected, exit 1, 133 MISMATCH (chacha driver: 361 checks, 133 failed)
+PASS mutant-poly-fold: detected, exit 1, 267 MISMATCH (chacha driver: 361 checks, 267 failed)
+PASS mutant-poly-final: detected, exit 1, 272 MISMATCH (chacha driver: 361 checks, 272 failed)
+PASS bench-1MiB: 16 open+reseal rounds restored the plaintext; sealed sha256 314d4f2a5908e50854a934af2df4cee3f86baa891a64a68a384a58432b1e260b equals cryptography
+THROUGHPUT bench-1MiB: 33 MiB through seal/open in 166700263 ns = 207.6 MB/s (whole process, incl. start-up and pattern checks)
+CHACHA PASS vectors=3087 (wycheproof=339) mutants=5/5

@@ -1,0 +1,58 @@
+PASS | good EC chain, chacha        | expect OK                                                           | got OK
+PASS | good EC chain, aes128gcm     | expect OK                                                           | got OK
+PASS | good RSA leaf (rsa_pss)      | expect OK                                                           | got OK
+PASS | expired leaf                 | expect TLSERR TLS_ERR_CERTIFICATE detail 2 X509_ERR_EXPIRED         | got TLSERR TLS_ERR_CERTIFICATE detail 2 X509_ERR_EXPIRED (exit 27)
+PASS | not-yet-valid leaf           | expect TLSERR TLS_ERR_CERTIFICATE detail 3                          | got TLSERR TLS_ERR_CERTIFICATE detail 3 X509_ERR_NOT_YET_VALID (exit 27)
+PASS | wrong name                   | expect TLSERR TLS_ERR_CERTIFICATE detail 4                          | got TLSERR TLS_ERR_CERTIFICATE detail 4 X509_ERR_NAME_MISMATCH (exit 27)
+PASS | self-signed leaf (CA:TRUE)   | expect TLSERR TLS_ERR_CERTIFICATE detail 15                         | got TLSERR TLS_ERR_CERTIFICATE detail 15 X509_ERR_LEAF_IS_CA (exit 27)
+PASS | self-signed leaf (CA:FALSE)  | expect TLSERR TLS_ERR_CERTIFICATE detail 5                          | got TLSERR TLS_ERR_CERTIFICATE detail 5 X509_ERR_UNKNOWN_ISSUER (exit 27)
+PASS | bad cert signature           | expect TLSERR TLS_ERR_CERTIFICATE detail 6                          | got TLSERR TLS_ERR_CERTIFICATE detail 6 X509_ERR_BAD_SIGNATURE (exit 27)
+PASS | unknown issuer               | expect TLSERR TLS_ERR_CERTIFICATE detail 5                          | got TLSERR TLS_ERR_CERTIFICATE detail 5 X509_ERR_UNKNOWN_ISSUER (exit 27)
+PASS | missing intermediate         | expect TLSERR TLS_ERR_CERTIFICATE detail 5                          | got TLSERR TLS_ERR_CERTIFICATE detail 5 X509_ERR_UNKNOWN_ISSUER (exit 27)
+PASS | TLS 1.2 only server          | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 70                      | got TLSERR TLS_ERR_ALERT_RECEIVED detail 70 (exit 31)
+PASS | AES-256 suite only           | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 40                      | got TLSERR TLS_ERR_ALERT_RECEIVED detail 40 (exit 31)
+PASS | P-256 group only             | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 40                      | got TLSERR TLS_ERR_ALERT_RECEIVED detail 40 (exit 31)
+PASS | approved: P-256, aes128gcm   | expect OK                                                           | got OK
+PASS | approved: P-384, aes128gcm   | expect OK                                                           | got OK
+PASS | approved: RSA leaf (rsa_pss) | expect OK                                                           | got OK
+PASS | approved: unrestricted srv   | expect OK                                                           | got OK
+PASS | approved: chacha-only srv    | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 40                      | got TLSERR TLS_ERR_ALERT_RECEIVED detail 40 (exit 31)
+PASS | approved: X25519-only srv    | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 40                      | got TLSERR TLS_ERR_ALERT_RECEIVED detail 40 (exit 31)
+PASS | fake ServerHello: tls12      | expect TLSERR TLS_ERR_PROTOCOL_VERSION                              | got TLSERR TLS_ERR_PROTOCOL_VERSION detail 0 (exit 19)
+PASS | fake ServerHello: hrr        | expect TLSERR TLS_ERR_HELLO_RETRY_UNSUPPORTED                       | got TLSERR TLS_ERR_HELLO_RETRY_UNSUPPORTED detail 0 (exit 23)
+PASS | fake ServerHello: suite      | expect TLSERR TLS_ERR_CIPHER_SUITE                                  | got TLSERR TLS_ERR_CIPHER_SUITE detail 0 (exit 20)
+PASS | fake ServerHello: sid        | expect TLSERR TLS_ERR_SESSION_ID_ECHO                               | got TLSERR TLS_ERR_SESSION_ID_ECHO detail 0 (exit 24)
+PASS | fake ServerHello: group      | expect TLSERR TLS_ERR_KEY_SHARE                                     | got TLSERR TLS_ERR_KEY_SHARE detail 0 (exit 21)
+PASS | fake ServerHello: zero       | expect TLSERR TLS_ERR_ZERO_SHARED_SECRET                            | got TLSERR TLS_ERR_ZERO_SHARED_SECRET detail 0 (exit 25)
+PASS | fake ServerHello: dupext     | expect TLSERR TLS_ERR_EXTENSION                                     | got TLSERR TLS_ERR_EXTENSION detail 0 (exit 22)
+PASS | fake ServerHello: trail      | expect TLSERR TLS_ERR_DECODE                                        | got TLSERR TLS_ERR_DECODE detail 0 (exit 18)
+PASS | fake ServerHello: apchacha [0,0,0,0,1] | expect TLSERR TLS_ERR_CIPHER_SUITE                                  | got TLSERR TLS_ERR_CIPHER_SUITE detail 0 (exit 20)
+PASS | fake ServerHello: apx25519 [0,0,0,0,1] | expect TLSERR TLS_ERR_KEY_SHARE                                     | got TLSERR TLS_ERR_KEY_SHARE detail 0 (exit 21)
+PASS | fake ServerHello: apbad256 [0,0,0,0,1] | expect TLSERR TLS_ERR_KEY_SHARE                                     | got TLSERR TLS_ERR_KEY_SHARE detail 0 (exit 21)
+PASS | fake ServerHello: apbad384 [0,0,0,0,1] | expect TLSERR TLS_ERR_KEY_SHARE                                     | got TLSERR TLS_ERR_KEY_SHARE detail 0 (exit 21)
+PASS | fake ServerHello: apchacha   | expect TLSERR TLS_ERR_KEY_SHARE                                     | got TLSERR TLS_ERR_KEY_SHARE detail 0 (exit 21)
+PASS | fakesrv: ok                  | expect OK                                                           | got OK
+PASS | fakesrv: empty50             | expect OK                                                           | got OK
+PASS | fakesrv: ccs2                | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)         | got TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)
+PASS | fakesrv: ccsflood            | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)         | got TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)
+PASS | fakesrv: ccspre              | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)         | got TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)
+PASS | fakesrv: ccslate             | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)         | got TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)
+PASS | fakesrv: encccs              | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)         | got TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)
+PASS | fakesrv: frag                | expect TLSERR TLS_ERR_MESSAGE_TOO_BIG detail 0 (exit 32)            | got TLSERR TLS_ERR_MESSAGE_TOO_BIG detail 0 (exit 32)
+PASS | fakesrv: cvbad               | expect TLSERR TLS_ERR_CERTIFICATE_VERIFY                            | got TLSERR TLS_ERR_CERTIFICATE_VERIFY detail 6 X509_ERR_BAD_SIGNATURE (exit 29)
+PASS | fakesrv: cvkey               | expect TLSERR TLS_ERR_CERTIFICATE_VERIFY                            | got TLSERR TLS_ERR_CERTIFICATE_VERIFY detail 6 X509_ERR_BAD_SIGNATURE (exit 29)
+PASS | fakesrv: cvskip              | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE                            | got TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)
+PASS | fakesrv: empty1500           | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)         | got TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)
+PASS | fakesrv: tickets1500         | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)         | got TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)
+PASS | fakesrv: closehs             | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 0 (exit 31)             | got TLSERR TLS_ERR_ALERT_RECEIVED detail 0 (exit 31)
+PASS | fakesrv: closepre            | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 0 (exit 31)             | got TLSERR TLS_ERR_ALERT_RECEIVED detail 0 (exit 31)
+PASS | fakesrv: kuexact [5,0,0]     | expect OK                                                           | got OK
+PASS | fakesrv: kuover [5,0,0]      | expect TLSERR TLS_ERR_SEQUENCE_LIMIT detail 0 (exit 38)             | got TLSERR TLS_ERR_SEQUENCE_LIMIT detail 0 (exit 38)
+PASS | fakesrv: kurot [5,0,0]       | expect OK                                                           | got OK
+PASS | fakesrv: kuw:8 [8,0,1]       | expect OK                                                           | got OK
+PASS | fakesrv: loris [0,2000,0]    | expect TLSERR TLS_ERR_TIMEOUT detail 0 (exit 13)                    | got TLSERR TLS_ERR_TIMEOUT detail 0 (exit 13)
+PASS | fakesrv: slowsh [0,10000,0]  | expect OK                                                           | got OK
+PASS | fakesrv: ap-ok [0,0,0,0,1]   | expect OK                                                           | got OK
+PASS | fakesrv: ap-cvbad [0,0,0,0,1] | expect TLSERR TLS_ERR_CERTIFICATE_VERIFY                            | got TLSERR TLS_ERR_CERTIFICATE_VERIFY detail 6 X509_ERR_BAD_SIGNATURE (exit 29)
+PASS | tampered record (proxy)      | expect TLSERR TLS_ERR_BAD_RECORD_MAC                                | got TLSERR TLS_ERR_BAD_RECORD_MAC detail 0 (exit 16)
+INTEROP PASS rows=57

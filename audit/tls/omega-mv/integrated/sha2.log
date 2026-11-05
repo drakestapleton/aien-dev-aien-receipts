@@ -1,0 +1,25 @@
+omc     sha256 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+sha2.om sha256 5cf0f98116def6917d3a373f2bd4c3932d46e3ff84d9567bbae9e720366fdb33
+hkdf.om sha256 5c3ce5f67627f89ce42961c3076c556d16a2eb6c72d704ff68e13b2819333778
+PASS nist-sha256-ShortMsg: 65 vectors, sha2 driver: 130 checks, 0 failed
+PASS nist-sha256-LongMsg: 64 vectors, sha2 driver: 128 checks, 0 failed
+PASS nist-sha256-Monte: 100 vectors, sha2 driver: 100 checks, 0 failed
+PASS nist-sha384-ShortMsg: 129 vectors, sha2 driver: 258 checks, 0 failed
+PASS nist-sha384-LongMsg: 128 vectors, sha2 driver: 256 checks, 0 failed
+PASS nist-sha384-Monte: 100 vectors, sha2 driver: 100 checks, 0 failed
+PASS nist-sha512-ShortMsg: 129 vectors, sha2 driver: 258 checks, 0 failed
+PASS nist-sha512-LongMsg: 128 vectors, sha2 driver: 256 checks, 0 failed
+PASS nist-sha512-Monte: 100 vectors, sha2 driver: 100 checks, 0 failed
+PASS rfc4231-hmac: 21 vectors, sha2 driver: 42 checks, 0 failed
+PASS rfc5869-hkdf: 6 vectors, sha2 driver: 9 checks, 0 failed
+PASS generated-long: 33 vectors, sha2 driver: 33 checks, 0 failed
+PASS wycheproof-hmac: 522 vectors, sha2 driver: 720 checks, 0 failed
+PASS wycheproof-hkdf: 252 vectors, sha2 driver: 495 checks, 0 failed
+PASS mutant-sha256-k0: detected (130 failure lines; sha2 driver: 130 checks, 130 failed)
+PASS mutant-sha512-k0: detected (258 failure lines; sha2 driver: 258 checks, 258 failed)
+PASS mutant-hmac-ipad: detected (21 failure lines; sha2 driver: 42 checks, 21 failed)
+PASS mutant-hkdf-ctr: detected (243 failure lines; sha2 driver: 495 checks, 243 failed)
+PASS mutant-expect: detected (2 failure lines; sha2 driver: 130 checks, 2 failed)
+PASS neg-malformed: detected (1 failure lines; sha2 driver: 1 checks, 1 failed)
+PASS neg-tag-flip: detected (1 failure lines; sha2 driver: 42 checks, 1 failed)
+SHA2 PASS vectors=1777 (wycheproof=774) mutants=5/5

@@ -1,0 +1,239 @@
+note bench.om: HTTPS benchmark client for om/tls (program mode, composed after every om/tls unit).
+note usage: bench MODE PORT N PATH STOREFILE
+note   MODE h: N full handshakes to 127.0.0.1:PORT (TLS name bench.test), close_notify after each;
+note           sample = ns from before the TCP connect to the end of tls_connect
+note   MODE g: N HTTPS GETs of PATH (HTTP/1.0, one connection each, read to close_notify);
+note           sample = ns from before the TCP connect to the end of the response
+note   MODE b: N bulk reads of PATH; sample = ns from the request write to the end of the response
+note           (the handshake is excluded)
+note   MODE d: one GET of PATH, the decrypted response bytes go to stdout (correctness gate)
+note Every sample prints "S NANOSECONDS BYTES" on stdout. No resumption, no tickets are used.
+note Exit 0 on success, 10 + code on a TLS failure, 2 usage, 3 connect failure, 4 short body.
+
+text bnusage "usage: bench h|g|b|d PORT N PATH STOREFILE\n"
+text bnhost "bench.test"
+text bnip "127.0.0.1"
+text bnget1 "GET /"
+text bnget2 " HTTP/1.0"
+text bnerr "TLSERR "
+text bnnl "\n"
+const BNERR ulong 4611686018427387904
+
+fn bn_arg i ulong a edit uchar * to ulong
+n = argread i a 0 len a
+if lt n 0
+ret 0
+end
+ret ulong n
+end
+
+fn bn_num a view uchar * to ulong
+v = ulong 0
+for i ulong len a
+d = ulong get a i
+if or lt d 48 gt d 57
+ret 0
+end
+v = add mul v 10 sub d 48
+if gt v 99999999
+ret 0
+end
+end
+ret v
+end
+
+fn bn_dec v ulong o edit uchar * p ulong to ulong
+t = new uchar 24 0
+n = ulong 0
+x = v
+while true bound 24
+put t n uchar add 48 rem x 10
+n = add n 1
+x = div x 10
+if eq x 0
+break
+end
+end
+for i ulong n
+put o add p i get t sub sub n 1 i
+end
+ret add p n
+end
+
+note "S ns bytes\n"
+fn bn_emit ns ulong by ulong to void
+o = new uchar 64 0
+put o 0 83
+put o 1 32
+p = bn_dec ns o 2
+put o p 32
+p = bn_dec by o add p 1
+put o p 10
+w = write 1 o 0 add p 1
+end
+
+note request "GET /PATH HTTP/1.0\r\n\r\n" into w[4096..) from the path w[256..256+pl);
+note returns its length
+fn bn_req w edit uchar * pl ulong to ulong
+p = ulong 4096
+for i ulong len bnget1
+put w p get bnget1 i
+p = add p 1
+end
+for i ulong pl
+put w p get w add 256 i
+p = add p 1
+end
+for i ulong len bnget2
+put w p get bnget2 i
+p = add p 1
+end
+put w p 13
+put w add p 1 10
+put w add p 2 13
+put w add p 3 10
+ret sub add p 4 4096
+end
+
+note read to close_notify; bytes received, or 1 shl 62 plus the code on error. dump 1 copies to stdout
+fn bn_drain c edit uchar * dump ulong to ulong
+b = new uchar 16384 0
+t = ulong 0
+while true bound 999999
+r = tls_read c b
+if eq r 0
+ret t
+end
+if lt r 0
+ret add BNERR ulong neg r
+end
+t = add t ulong r
+if eq dump 1
+w = write 1 b 0 ulong r
+end
+end
+ret t
+end
+
+fn bn_fail e ulong to int
+m = new uchar 256 0
+w = write 2 bnerr 0 len bnerr
+n = tls_errname e m
+w = write 2 m 0 n
+w = write 2 bnnl 0 1
+ret int add 10 e
+end
+
+note s: 0 mode (104 h, 103 g, 98 b, 100 d), 1 port, 2 fd, 3 start ns, 4 sample ns, 5 bytes
+note connect and handshake; 0, 1000 on a connect failure, or a TLS code
+fn bn_hs c edit uchar * st view uchar * s edit ulong * to ulong
+e = tls_init c bnhost 0
+if ne e 0
+ret e
+end
+t0 = monons
+fd = tls_dial bnip get s 1
+if lt fd 0
+ret 1000
+end
+e = tls_connect c st int fd
+t1 = monons
+put s 2 ulong fd
+put s 3 ulong t0
+put s 4 sub ulong t1 ulong t0
+put s 5 0
+if ne e 0
+x = fclose int fd
+ret e
+end
+ret 0
+end
+
+note after the handshake: close (h) or send the request and read the response; s[6] = request time
+fn bn_xfer c edit uchar * rq view uchar * s edit ulong * to ulong
+if eq get s 0 104
+tls_close c
+x = fclose int get s 2
+ret 0
+end
+put s 6 ulong monons
+r = tls_write c rq
+if lt r 0
+x = fclose int get s 2
+ret ulong neg r
+end
+dump = ulong 0
+if eq get s 0 100
+dump = 1
+end
+n = bn_drain c dump
+put s 7 ulong monons
+tls_close c
+x = fclose int get s 2
+if ge n BNERR
+ret sub n BNERR
+end
+put s 5 n
+put s 4 sub get s 7 get s 3
+if eq get s 0 98
+put s 4 sub get s 7 get s 6
+end
+ret 0
+end
+
+note arguments into s: 0 mode, 1 port, 8 count, 9 request length (request at w[4096..)); 0 or 2
+fn bn_args w edit uchar * s edit ulong * to ulong
+if ne argcnt 6
+ret 2
+end
+if ne bn_arg 1 part w 0 256 1
+ret 2
+end
+put s 0 ulong get w 0
+put s 1 bn_num part w 0 bn_arg 2 part w 0 256
+put s 8 bn_num part w 0 bn_arg 3 part w 0 256
+if or eq get s 1 0 eq get s 8 0
+ret 2
+end
+md = get s 0
+if and and ne md 104 ne md 103 and ne md 98 ne md 100
+ret 2
+end
+put s 9 bn_req w bn_arg 4 part w 256 1024
+ret 0
+end
+
+fn bn_main c edit uchar * st edit uchar * w edit uchar * to int
+s = new ulong 12 0
+if ne bn_args w s 0
+x = write 2 bnusage 0 len bnusage
+ret 2
+end
+e = tls_storef st part w 0 bn_arg 5 part w 0 256
+if ne e 0
+ret bn_fail e
+end
+for i ulong get s 8
+e = bn_hs c st s
+if eq e 0
+e = bn_xfer c part w 4096 get s 9 s
+end
+if eq e 1000
+ret 3
+end
+if ne e 0
+ret bn_fail e
+end
+if ne get s 0 100
+bn_emit get s 4 get s 5
+end
+end
+ret 0
+end
+
+fn main to int
+c = new uchar 119296 0
+st = new uchar 262144 0
+w = new uchar 8192 0
+ret bn_main c st w
+end

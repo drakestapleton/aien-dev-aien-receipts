@@ -1,0 +1,3 @@
+373179d17fc6dedff47e07cdd3bd0b6f6518dec70fd8a1e7a22746709c6052f1  samples.bin
+e4076bd59915bb5e39402794b718cfd5a75890b00d15bfa7a9ee377d7c8c6e1f  restart.bin
+ENTROPY PASS non_iid=7.182711 iid=7.871996 iid_tests=passed restart_iid=7.871996 restart_non_iid=6.638383

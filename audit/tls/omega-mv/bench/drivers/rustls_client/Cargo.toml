@@ -1,0 +1,12 @@
+# THROWAWAY HOST TOOLING (benchmark peer arm, not product code)
+[package]
+name = "rustls_client"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rustls = { version = "=0.23.42", default-features = false, features = ["std", "aws_lc_rs", "ring", "tls12"] }
+rustls-pemfile = "2"
+
+[profile.release]
+opt-level = 3

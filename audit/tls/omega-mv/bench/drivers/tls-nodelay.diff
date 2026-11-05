@@ -1,0 +1,27 @@
+diff --git a/om/tls/tls.om b/om/tls/tls.om
+index 0cc11699..c08e42a8 100644
+--- a/om/tls/tls.om
++++ b/om/tls/tls.om
+@@ -2350,7 +2350,11 @@ end
+ ret dns_parse part r 0 ulong n q ip
+ end
+ 
+-note TCP connect to ip:port, non-blocking with a 10 s limit; returns fd (>= 0) or minus a code
++note TCP connect to ip:port, non-blocking with a 10 s limit; returns fd (>= 0) or minus a code.
++note TCP_NODELAY is set: TLS hands the kernel whole records, and with Nagle on, the first request
++note record waits behind the un-acknowledged Finished for the peer's delayed ACK (about 40 ms per
++note connection on Linux loopback, measured in the TlsProof benchmark). A refusal is ignored: it
++note only costs latency.
+ fn tcp_open4 ip view uchar * port ulong to long
+ sa = new uchar 16 0
+ tcp_sa sa ip port
+@@ -2359,6 +2363,9 @@ if lt fd 0
+ ret neg long TLECONN
+ end
+ f = int fd
++one = new uchar 4 0
++put one 0 1
++x = sockopt f 6 1 one 0 4
+ r = connect f sa 0 16
+ if eq r -115
+ w = waitio f 4 10000000000

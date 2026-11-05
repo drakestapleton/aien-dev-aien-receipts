@@ -1,0 +1,57 @@
+omc 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+ecdh.om e2784e59f47e2ad0e4ad17c063b3fa3712c00b6a5d01d1821e7801a22ece09e7 functions 17
+ec.om 909f37c797e187bd0663bde9f57c75d6ce41eb2c9726a6b50d6fc714e424c060
+driver 9ecd005d296d926bc0888dafd174898b8d40062c99a1804bb5a781c349d6315a
+PASS cavp_cdh: cases 100 calls 100 controls 300 mismatches 0 ns 362921809 codes 100 0 0 0 0 0 0
+PASS edge: cases 74 calls 74 controls 56 mismatches 0 ns 146151147 codes 20 0 6 22 16 4 6
+PASS wycheproof_secp256r1_ecpoint: cases 355 calls 355 controls 1320 mismatches 0 ns 617982027 codes 330 0 0 25 0 0 0
+PASS wycheproof_secp256r1_spki: cases 349 calls 349 controls 1320 mismatches 0 ns 617714795 codes 330 0 0 19 0 0 0
+PASS wycheproof_secp384r1_ecpoint: cases 790 calls 790 controls 3084 mismatches 0 ns 4153097191 codes 771 0 0 19 0 0 0
+PASS wycheproof_secp384r1_spki: cases 790 calls 790 controls 3084 mismatches 0 ns 4420132266 codes 771 0 0 19 0 0 0
+NOT_RUN wycheproof ecdh_secp256r1_test.json CompressedPoint,CompressedPublic: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json CompressedPoint,InvalidCompressedPublic: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json CompressedPoint,WrongCurve: 6
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidAsn: 221
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidEncoding: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidPublic,LargeCofactor,UnnamedCurve: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidPublic,ModifiedGroup: 2
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidPublic,ModifiedPrime,UnnamedCurve: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidPublic,NegativeCofactor,UnnamedCurve: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidPublic,NoCofactor,UnnamedCurve: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidPublic,UnnamedCurve,WeakPublicKey: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json InvalidPublic,UnnamedCurve,WrongOrder: 2
+NOT_RUN wycheproof ecdh_secp256r1_test.json ModifiedCofactor,UnnamedCurve,UnusedParam: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json ModifiedCurveParameter,UnnamedCurve,UnusedParam: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json ModifiedGenerator,UnnamedCurve,UnusedParam: 2
+NOT_RUN wycheproof ecdh_secp256r1_test.json NoCofactor,UnnamedCurve,UnusedParam: 1
+NOT_RUN wycheproof ecdh_secp256r1_test.json UnnamedCurve,UnusedParam,WrongOrder: 2
+NOT_RUN wycheproof ecdh_secp256r1_test.json WrongCurve: 17
+NOT_RUN wycheproof ecdh_secp384r1_test.json CompressedPoint,CompressedPublic: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json CompressedPoint,InvalidCompressedPublic: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidAsn: 221
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidEncoding: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidPublic,LargeCofactor,UnnamedCurve: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidPublic,ModifiedGroup: 3
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidPublic,ModifiedPrime,UnnamedCurve: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidPublic,NegativeCofactor,UnnamedCurve: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidPublic,NoCofactor,UnnamedCurve: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidPublic,UnnamedCurve,WeakPublicKey: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json InvalidPublic,UnnamedCurve,WrongOrder: 2
+NOT_RUN wycheproof ecdh_secp384r1_test.json ModifiedCofactor,UnnamedCurve,UnusedParam: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json ModifiedCurveParameter,UnnamedCurve,UnusedParam: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json ModifiedGenerator,UnnamedCurve,UnusedParam: 2
+NOT_RUN wycheproof ecdh_secp384r1_test.json NoCofactor,UnnamedCurve,UnusedParam: 1
+NOT_RUN wycheproof ecdh_secp384r1_test.json UnnamedCurve,UnusedParam,WrongOrder: 2
+NOT_RUN wycheproof ecdh_secp384r1_test.json WrongCurve: 16
+PASS mutant-expectation detected: 1 mismatches, cases 100 calls 100 controls 296 mismatches 1 ns 1360100924 codes 100 0 0 0 0 0 0
+PASS mutant-peer detected: 1014 mismatches, cases 355 calls 355 controls 1320 mismatches 1014 ns 664379808 codes 0 355 0 0 0 0 0
+PASS mutant-step detected: 150 mismatches, cases 100 calls 100 controls 300 mismatches 150 ns 364647612 codes 100 0 0 0 0 0 0
+PASS mutant-swap detected: 150 mismatches, cases 100 calls 100 controls 300 mismatches 150 ns 386601077 codes 100 0 0 0 0 0 0
+PASS mutant-bits detected: 150 mismatches, cases 100 calls 100 controls 300 mismatches 150 ns 361999127 codes 100 0 0 0 0 0 0
+PASS mutant-formula detected: 150 mismatches, cases 100 calls 100 controls 300 mismatches 150 ns 364146946 codes 100 0 0 0 0 0 0
+PASS mutant-csub detected: 150 mismatches, cases 100 calls 100 controls 300 mismatches 150 ns 357143278 codes 100 0 0 0 0 0 0
+PASS mutant-range detected: 20 mismatches, cases 74 calls 74 controls 56 mismatches 20 ns 146470312 codes 28 4 6 22 4 4 6
+PASS mutant-pct detected: 2 mismatches, cases 74 calls 74 controls 56 mismatches 2 ns 146117524 codes 22 0 6 22 16 4 4
+TIME P-256: 100 shared-secret computations, 187513963 ns total, 1875139 ns per call
+TIME P-384: 100 shared-secret computations, 541502735 ns total, 5415027 ns per call
+ECDH PASS vectors=2458 (cavp=100 wycheproof=2284 edge=74) mutants=9/9

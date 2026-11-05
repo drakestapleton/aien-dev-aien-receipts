@@ -1,0 +1,4 @@
+tested commit 461c607fca4db53657dbbaaf6b8175d178288e82 (fresh worktree /tmp/tlsproof/approvedmode/int)
+PR head 5c098681ef13024ac0a7fe6611e5b99aba46b432 (README results rows only on top)
+omc 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+all runs: nice -n 19 ionice -c3 taskset -c 6-9, sequential, 2026-10-26

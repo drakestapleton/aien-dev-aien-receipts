@@ -1,0 +1,28 @@
+omc     sha256 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+library sha256 b19d8ce88fc65eb0e69e51f52f3af70b9c46c4bfbbc84004d43e536bf4ced17f
+library functions 37
+PASS fips197: aesgcm driver: 4 checks, 0 failed
+PASS wycheproof: aesgcm driver: 316 checks, 0 failed
+PASS gcmEncryptExtIV128: aesgcm driver: 7875 checks, 0 failed
+PASS gcmEncryptExtIV192: aesgcm driver: 7875 checks, 0 failed
+PASS gcmEncryptExtIV256: aesgcm driver: 7875 checks, 0 failed
+PASS gcmDecrypt128: aesgcm driver: 7875 checks, 0 failed
+PASS gcmDecrypt192: aesgcm driver: 7875 checks, 0 failed
+PASS gcmDecrypt256: aesgcm driver: 7875 checks, 0 failed
+nist: 47250 vectors (11908 decrypt vectors expect FAIL)
+PASS params: aesgcm driver: 19 checks, 0 failed
+PASS speed: aesgcm driver: 3 checks, 0 failed
+aesgcm speed bytes=1048576 seal_ns=19756863 open_ns=20032320 seal_MBps=53 open_MBps=52
+aesgcm speed bytes=1048576 seal_ns=19800942 open_ns=19737695 seal_MBps=52 open_MBps=53
+aesgcm speed bytes=1048576 seal_ns=19674381 open_ns=19676158 seal_MBps=53 open_MBps=53
+PASS mutant-sbox: detected, exit 1, 233 MISMATCH (aesgcm driver: 320 checks, 233 failed)
+PASS mutant-ghash: detected, exit 1, 226 MISMATCH (aesgcm driver: 320 checks, 226 failed)
+PASS mutant-rcon: detected, exit 1, 81 MISMATCH (aesgcm driver: 320 checks, 81 failed)
+PASS mutant-tagcheck: detected, exit 1, 310 MISMATCH (aesgcm driver: 320 checks, 310 failed)
+PASS mutant-expect: detected, exit 1, 1 MISMATCH (aesgcm driver: 316 checks, 1 failed)
+NOT_RUN wycheproof aes_gcm_siv_test.json: AES-GCM-SIV (RFC 8452) is not implemented
+NOT_RUN wycheproof aria_gcm_test.json, seed_gcm_test.json, sm4_gcm_test.json: other block ciphers
+NOT_RUN wycheproof c2sp_chunked_encryption_aes_{128,256}_gcm_test.json: chunked-encryption construction, not raw AES-GCM
+wycheproof: 316 tests: valid 229 passed, invalid 87 refused, acceptable 0
+checks outside the vectors: params=19 speed=3 (both passed)
+AESGCM PASS vectors=47570 (fips197=4, nist=47250, wycheproof=316) mutants=5/5

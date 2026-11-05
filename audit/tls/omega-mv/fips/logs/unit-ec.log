@@ -1,0 +1,92 @@
+omc 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+ec.om 909f37c797e187bd0663bde9f57c75d6ce41eb2c9726a6b50d6fc714e424c060 functions 27
+sha2.om 5cf0f98116def6917d3a373f2bd4c3932d46e3ff84d9567bbae9e720366fdb33
+driver e0424968291256158695a6c339806ba158c475144ce13662e8ce8717607b7e66
+PASS cavp_sigver: cases 180 verifies 180 controls 108 mismatches 0 ns 470810081 codes 36 144 0 0 0 0
+PASS edge: cases 56 verifies 56 controls 12 mismatches 0 ns 14920933 codes 4 0 16 20 12 4
+PASS wycheproof_secp256r1_sha256: cases 484 verifies 484 controls 522 mismatches 0 ns 265498881 codes 174 23 221 0 66 0
+PASS wycheproof_secp256r1_sha256_p1363: cases 262 verifies 262 controls 519 mismatches 0 ns 250449489 codes 173 18 21 0 50 0
+PASS wycheproof_secp256r1_sha512: cases 554 verifies 554 controls 729 mismatches 0 ns 366962987 codes 243 25 220 0 66 0
+PASS wycheproof_secp256r1_sha512_p1363: cases 332 verifies 332 controls 726 mismatches 0 ns 371512097 codes 242 19 21 0 50 0
+PASS wycheproof_secp384r1_sha256: cases 472 verifies 472 controls 486 mismatches 0 ns 737676443 codes 162 24 220 0 66 0
+PASS wycheproof_secp384r1_sha384: cases 504 verifies 504 controls 582 mismatches 0 ns 888385879 codes 194 23 221 0 66 0
+PASS wycheproof_secp384r1_sha384_p1363: cases 280 verifies 280 controls 579 mismatches 0 ns 834368142 codes 193 18 19 0 50 0
+PASS wycheproof_secp384r1_sha512: cases 542 verifies 542 controls 693 mismatches 0 ns 1011820481 codes 231 23 221 0 67 0
+PASS wycheproof_secp384r1_sha512_p1363: cases 318 verifies 318 controls 690 mismatches 0 ns 1006872600 codes 230 19 19 0 50 0
+NOT_RUN wycheproof ecdsa_brainpoolP224r1_sha224_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP224r1_sha224_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP224r1_sha3_224_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP256r1_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP256r1_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP256r1_sha3_256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP320r1_sha384_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP320r1_sha384_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP320r1_sha3_384_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP384r1_sha384_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP384r1_sha384_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP384r1_sha3_384_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP512r1_sha3_512_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP512r1_sha512_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_brainpoolP512r1_sha512_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp160k1_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp160k1_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp160r1_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp160r1_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp160r2_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp160r2_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp192k1_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp192k1_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp192r1_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp192r1_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224k1_sha224_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224k1_sha224_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224k1_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224k1_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha224_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha224_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha3_224_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha3_256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha3_512_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha512_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_sha512_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_shake128_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp224r1_shake128_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_sha256_bitcoin_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_sha256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_sha256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_sha3_256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_sha3_512_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_sha512_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_sha512_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_shake128_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_shake128_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_shake256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256k1_shake256_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp256r1_sha3_256_test.json: hash not SHA-256/384/512 (om/tls/sha2.om)
+NOT_RUN wycheproof ecdsa_secp256r1_sha3_512_test.json: hash not SHA-256/384/512 (om/tls/sha2.om)
+NOT_RUN wycheproof ecdsa_secp256r1_shake128_p1363_test.json: hash not SHA-256/384/512 (om/tls/sha2.om)
+NOT_RUN wycheproof ecdsa_secp256r1_shake128_test.json: hash not SHA-256/384/512 (om/tls/sha2.om)
+NOT_RUN wycheproof ecdsa_secp384r1_sha3_384_test.json: hash not SHA-256/384/512 (om/tls/sha2.om)
+NOT_RUN wycheproof ecdsa_secp384r1_sha3_512_test.json: hash not SHA-256/384/512 (om/tls/sha2.om)
+NOT_RUN wycheproof ecdsa_secp384r1_shake256_p1363_test.json: hash not SHA-256/384/512 (om/tls/sha2.om)
+NOT_RUN wycheproof ecdsa_secp384r1_shake256_test.json: hash not SHA-256/384/512 (om/tls/sha2.om)
+NOT_RUN wycheproof ecdsa_secp521r1_sha3_512_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp521r1_sha512_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp521r1_sha512_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp521r1_shake256_p1363_test.json: curve not P-256/P-384
+NOT_RUN wycheproof ecdsa_secp521r1_shake256_test.json: curve not P-256/P-384
+NOT_RUN cavp SigVer.rsp P-256/P-384 with SHA-1, SHA-224: hash not in om/tls/sha2.om
+NOT_RUN cavp SigVer.rsp P-192, P-224, P-521, K-*, B-* sections: curve not P-256/P-384
+NOT_RUN cavp SigVer_TruncatedSHAs.rsp (SHA-512/224, SHA-512/256): hash not in om/tls/sha2.om
+PASS mutant-expectation detected: 1 mismatches, cases 484 verifies 484 controls 519 mismatches 1 ns 265934885 codes 174 23 221 0 66 0
+PASS mutant-b256 detected: 696 mismatches, cases 484 verifies 484 controls 522 mismatches 696 ns 11215624 codes 0 0 0 484 0 0
+PASS mutant-padd detected: 194 mismatches, cases 504 verifies 504 controls 582 mismatches 194 ns 869068788 codes 0 217 221 0 66 0
+PASS mutant-n0 detected: 36 mismatches, cases 180 verifies 180 controls 108 mismatches 36 ns 475356380 codes 0 180 0 0 0 0
+PASS mutant-der detected: 2 mismatches, cases 56 verifies 56 controls 12 mismatches 2 ns 22879068 codes 6 0 14 20 12 4
+PASS mutant-digest-column detected: 1 mismatches, cases 504 verifies 504 controls 582 mismatches 1 ns 883737820 codes 194 23 221 0 66 0
+PASS fuzz: cases 3000 verifies 3000 controls 0 mismatches 0 ns 1505246251 codes 0 533 1290 1172 5 0
+TIME secp256r1_sha256: 200 verifies, 268657601 ns total, 1343288 ns per verify
+TIME secp384r1_sha384: 200 verifies, 751706587 ns total, 3758532 ns per verify
+EC PASS vectors=3984 (wycheproof=3748 cavp=180 edge=56) mutants=6/6

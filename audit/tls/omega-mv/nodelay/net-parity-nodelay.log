@@ -1,0 +1,11 @@
+PARITY PASS https://api.github.com/licenses/mit status='HTTP/1.1 200 OK' bytes=1956/1956 sha256=15b2a5994e7c6e3d/15b2a5994e7c6e3d
+PARITY PASS https://api.github.com/licenses/apache-2.0 status='HTTP/1.1 200 OK' bytes=12478/12478 sha256=c9fb7d13de08da3c/c9fb7d13de08da3c
+PARITY PASS https://api.github.com/repos/torvalds/linux/license status='HTTP/1.1 200 OK' bytes=1528/1528 sha256=afc6dbc05fb592ec/afc6dbc05fb592ec
+rc=0
+PARITY PASS https://raw.githubusercontent.com/torvalds/linux/v6.0/README status='HTTP/1.1 200 OK' bytes=727/727 sha256=bad58d396f62102b/bad58d396f62102b
+PARITY PASS https://raw.githubusercontent.com/torvalds/linux/v6.0/MAINTAINERS status='HTTP/1.1 200 OK' bytes=680548/680548 sha256=2e65a67b1f2ecd4e/2e65a67b1f2ecd4e
+rc=0
+PARITY PASS smtp://mail.gandi.net:465 exit=0 bytes=194/194 sha256=d5fbda7743efc6b0/d5fbda7743efc6b0
+rc=0
+PARITY PASS tsmtp://mail.gandi.net:587 exit=0 bytes=383/383 sha256=b618c769ed2c6b81/b618c769ed2c6b81
+rc=0

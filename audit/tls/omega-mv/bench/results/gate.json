@@ -1,0 +1,202 @@
+[
+ {
+  "suite": "chacha",
+  "arm": "omega",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 1436 0.00 0.00\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "omega",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 1436 0.09 0.03\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "omega-asis",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 1436 0.00 0.00\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "omega-asis",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 1436 0.09 0.03\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "openssl",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 6432 0.00 0.00\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "openssl",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 6432 0.01 0.01\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "rustls-awslc",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 4324 0.02 0.00\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "rustls-awslc",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 3928 0.03 0.01\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "rustls-ring",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 3780 0.00 0.00\n"
+ },
+ {
+  "suite": "chacha",
+  "arm": "rustls-ring",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 3396 0.01 0.02\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "omega",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 1436 0.02 0.00\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "omega",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 1436 0.38 0.03\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "omega-asis",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 1436 0.02 0.00\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "omega-asis",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 1436 0.40 0.02\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "openssl",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 6432 0.00 0.00\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "openssl",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 6432 0.01 0.01\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "rustls-awslc",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 3940 0.02 0.00\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "rustls-awslc",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 3940 0.02 0.03\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "rustls-ring",
+  "path": "1m.bin",
+  "frag": 16384,
+  "rc": 0,
+  "sha256": "631b84027d6b9e52b539c4e8373622d23032dfadc64d60af87339c9037e4f769",
+  "ok": true,
+  "err": "RUSAGE 3768 0.00 0.00\n"
+ },
+ {
+  "suite": "aes128gcm",
+  "arm": "rustls-ring",
+  "path": "16m.bin",
+  "frag": 1024,
+  "rc": 0,
+  "sha256": "287507f403176f1f5b22b9a4d9cb49f7d7f88ac19e406b5ae87ce109564846bd",
+  "ok": true,
+  "err": "RUSAGE 3396 0.00 0.01\n"
+ }
+]

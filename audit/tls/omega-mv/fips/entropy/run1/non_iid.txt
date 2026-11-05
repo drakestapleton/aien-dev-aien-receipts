@@ -1,0 +1,52 @@
+Opening file: 'samples.bin' (SHA-256 hash 3eb3092ba05c01331ac98cd67a85a4fad544d9b9d29ea7e8e01ceb5e00803247)
+Loaded 1000000 samples of 256 distinct 8-bit-wide symbols
+Number of Binary Symbols: 8000000
+
+Running non-IID tests...
+
+Running Most Common Value Estimate...
+Bitstring MCV Estimate: mode = 4000496, p-hat = 0.50006200000000001, p_u = 0.50051734661688807
+	Most Common Value Estimate (bit string) = 0.998508 / 1 bit(s)
+Literal MCV Estimate: mode = 4086, p-hat = 0.0040860000000000002, p_u = 0.0042503150701702127
+	Most Common Value Estimate = 7.878214 / 8 bit(s)
+
+Running Entropic Statistic Estimates (bit strings only)...
+Bitstring Collision Estimate: X-bar = 2.4997434637949612, sigma-hat = 0.50000001230617186, p = 0.52209598951138203
+	Collision Test Estimate (bit string) = 0.937613 / 1 bit(s)
+Bitstring Markov Estimate: P_0 = 0.50006200000000001, P_1 = 0.49993799999999999, P_0,0 = 0.50013973267314848, P_0,1 = 0.49986026732685152, P_1,0 = 0.49998437305835253, P_1,1 = 0.50001562694164747, p_max = 3.0452732910963602e-39
+	Markov Test Estimate (bit string) = 0.999599 / 1 bit(s)
+Bitstring Compression Estimate: X-bar = 5.2167880970631799, sigma-hat = 1.015680816725012, p = 0.024814266970960785
+	Compression Test Estimate (bit string) = 0.888781 / 1 bit(s)
+
+Running Tuple Estimates...
+Bitstring t-Tuple Estimate: t = 19, p-hat_max = 0.5245972756632644185599, p_u = 0.5250520709568226601811
+Bitstring LRS Estimate: u = 20, v = 42, p-hat = 0.50050784383410712, p_u = 0.50096319021962317
+	T-Tuple Test Estimate (bit string) = 0.929468 / 1 bit(s)
+Literal t-Tuple Estimate: t = 2, p-hat_max = 0.005916082741141726124143, p_u = 0.00611361859783037600165
+Literal LRS Estimate: u = 3, v = 5, p-hat = 0.0052530650643376779, p_u = 0.0054392651993506999
+	T-Tuple Test Estimate = 7.353758 / 8 bit(s)
+	LRS Test Estimate (bit string) = 0.997223 / 1 bit(s)
+	LRS Test Estimate = 7.522373 / 8 bit(s)
+
+Running Predictor Estimates...
+Bitstring MultiMCW Prediction Estimate: N = 7999937, Pglobal' = 0.50019878383293437 (C = 3997916) Plocal can't affect result (r = 23)
+	Multi Most Common in Window (MultiMCW) Prediction Test Estimate (bit string) = 0.999427 / 1 bit(s)
+Literal MultiMCW Prediction Estimate: N = 999937, Pglobal' = 0.004100602479636394 (C = 3939) Plocal can't affect result (r = 3)
+	Multi Most Common in Window (MultiMCW) Prediction Test Estimate = 7.929948 / 8 bit(s)
+Bitstring Lag Prediction Estimate: N = 7999999, Pglobal' = 0.50017103403969421 (C = 3997725) Plocal can't affect result (r = 25)
+	Lag Prediction Test Estimate (bit string) = 0.999507 / 1 bit(s)
+Literal Lag Prediction Estimate: N = 999999, Pglobal' = 0.0040758578958691874 (C = 3915) Plocal can't affect result (r = 3)
+	Lag Prediction Test Estimate = 7.938681 / 8 bit(s)
+Bitstring MultiMMC Prediction Estimate: N = 7999998, Pglobal' = 0.50017459653533825 (C = 3997753) Plocal can't affect result (r = 25)
+	Multi Markov Model with Counting (MultiMMC) Prediction Test Estimate (bit string) = 0.999496 / 1 bit(s)
+Literal MultiMMC Prediction Estimate: N = 999998, Pglobal' = 0.0041136173589241863 (C = 3952) Plocal can't affect result (r = 3)
+	Multi Markov Model with Counting (MultiMMC) Prediction Test Estimate = 7.925377 / 8 bit(s)
+Bitstring LZ78Y Prediction Estimate: N = 7999983, Pglobal' = 0.50042303453458037 (C = 3999733) Plocal can't affect result (r = 22)
+	LZ78Y Prediction Test Estimate (bit string) = 0.998780 / 1 bit(s)
+Literal LZ78Y Prediction Estimate: N = 999983, Pglobal' = 0.0041146994408407279 (C = 3953) Plocal can't affect result (r = 3)
+	LZ78Y Prediction Test Estimate = 7.924997 / 8 bit(s)
+
+H_original: 7.353758
+H_bitstring: 0.888781
+min(H_original, 8 X H_bitstring): 7.110248
+rc=0

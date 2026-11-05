@@ -1,0 +1,51 @@
+== 1. reproducible build at 2d613b2d2f4650ae9b5a693b3fb4caffab0dea20
+SAME omc 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+SAME aesgcm 92a384b5277a20adfc2e918b9fbac4f7f3201a75a527904e911f20b0da94dd80
+SAME chacha 9e273ff639ee9058a33c0ec84bb8e347bb1edda72d9029fe0f1662acc77a4487
+SAME ec 565b46f2bb8e3caae1e649369ec321d7aaea7896b240f366291eef47b2e222ea
+SAME rsa 1d70f954347cfc968b3093b1264f157d249e1db1978394b813b48b3943f3ccff
+SAME sha2 38cbf80f1532dd56f6adf290124a3875131407438cda0f9c9411fe1f79f79ec6
+SAME x25519 7bec688c2ac24da84856447f9d6e35708a0965fccbdd42f98c39e9f3d83d88f1
+SAME x509 b090d0f26ee617efde8b13d4f5311705d26c592b8ae29d3ab295f1a68d5299ca
+SAME tls-client 1badd70693e79ba9e716b63ba569c3af00999a90234ce216b1ed965cd75c48c7
+PASS reproducible build at 2d613b2d2f4650ae9b5a693b3fb4caffab0dea20
+== 2/3. suites at 2d613b2d2f4650ae9b5a693b3fb4caffab0dea20 (2d613b2d2f4650ae9b5a693b3fb4caffab0dea20)
+SHA2 PASS vectors=1777 (wycheproof=774) mutants=5/5
+X25519 PASS vectors=531 (wycheproof=518) mutants=7/7
+CHACHA PASS vectors=3087 (wycheproof=339) mutants=5/5
+AESGCM PASS vectors=47570 (fips197=4, nist=47250, wycheproof=316) mutants=5/5
+EC PASS vectors=3984 (wycheproof=3748 cavp=180 edge=56) mutants=6/6
+RSA PASS vectors=6486 (wycheproof=5250) mutants=4/4
+X509 PASS cases=91 (openssl-parity=73/91) mutants=12/12
+TLS PASS vectors=24 (rfc8448) dns=23 dit=1 interop=44 residue=PASS net=NOT_RUN mutants=27/27
+== 2/3. suites at audit/tls-proof (34e2065de568cc24c40e1b88c2424f1350d57f37)
+SHA2 PASS vectors=1777 (wycheproof=774) mutants=5/5
+X25519 PASS vectors=531 (wycheproof=518) mutants=7/7
+CHACHA PASS vectors=3087 (wycheproof=339) mutants=5/5
+AESGCM PASS vectors=47570 (fips197=4, nist=47250, wycheproof=316) mutants=5/5
+EC PASS vectors=3984 (wycheproof=3748 cavp=180 edge=56) mutants=6/6
+RSA PASS vectors=6486 (wycheproof=5250) mutants=4/4
+X509 PASS cases=91 (openssl-parity=73/91) mutants=12/12
+TLS PASS vectors=24 (rfc8448) dns=23 dit=1 interop=44 residue=PASS net=NOT_RUN mutants=27/27
+ACVP PARTIAL algos=18 tests=7543 not_applicable=7139 not_run=ML-KEM,hmacDRBG
+== 2/3. suites at audit/tls-fipsmodule (a38cf3d88afceb0c22a2bed04b9248005885ffd3)
+SHA2 PASS vectors=1777 (wycheproof=774) mutants=5/5
+X25519 PASS vectors=531 (wycheproof=518) mutants=7/7
+CHACHA PASS vectors=3087 (wycheproof=339) mutants=5/5
+AESGCM PASS vectors=47570 (fips197=4, nist=47250, wycheproof=316) mutants=5/5
+EC PASS vectors=3984 (wycheproof=3748 cavp=180 edge=56) mutants=6/6
+RSA PASS vectors=6486 (wycheproof=5250) mutants=4/4
+X509 PASS cases=91 (openssl-parity=73/91) mutants=12/12
+DRBG PASS vectors=810 (acvp=90, cavp=720) api=23 mutants=13/13
+FIPS PASS checks=45 drbgerr=46 kat-mutants=14/14 code-mutants=16/16
+TLS PASS vectors=24 (rfc8448) dns=23 dit=1 interop=44 residue=PASS net=NOT_RUN mutants=27/27
+== 2/3. suites at audit/tls-approvedmode (a96e448e460016e0de840912f2187140cd411660)
+SHA2 PASS vectors=1777 (wycheproof=774) mutants=5/5
+X25519 PASS vectors=531 (wycheproof=518) mutants=7/7
+CHACHA PASS vectors=3087 (wycheproof=339) mutants=5/5
+AESGCM PASS vectors=47570 (fips197=4, nist=47250, wycheproof=316) mutants=5/5
+EC PASS vectors=3984 (wycheproof=3748 cavp=180 edge=56) mutants=6/6
+RSA PASS vectors=6486 (wycheproof=5250) mutants=4/4
+X509 PASS cases=91 (openssl-parity=73/91) mutants=12/12
+ECDH PASS vectors=2458 (cavp=100 wycheproof=2284 edge=74) mutants=9/9
+TLS PASS vectors=24 (rfc8448) dns=23 dit=1 interop=57 residue=PASS net=NOT_RUN mutants=34/34

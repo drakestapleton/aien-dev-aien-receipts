@@ -1,0 +1,16 @@
+omc 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+x25519.om c2a3a01d6cffff95cbaa130a586ca8f7365fb56c67ec1b2f4920eceebfed23f5
+driver 863448df5f4f1c76016be39a278d9bf5cd9136680f6a8c0daee60576d91d4ae2
+PASS rfc7748: cases 9 calls 13 mismatches 0 ns 184073648
+PASS wycheproof: cases 518 calls 518 mismatches 0 ns 104806888
+NOTE rfc7748-iter1m not run (opt-in: X25519_ITER1M=1)
+PASS negative-control detected: 1 mismatches, cases 9 calls 13 mismatches 1 ns 184363027
+PASS mutant-expectation detected: 1 mismatches, cases 518 calls 518 mismatches 1 ns 90677010
+PASS mut-a24 detected: 8 mismatches, cases 9 calls 13 mismatches 8 ns 177082229
+PASS mut-step detected: 8 mismatches, cases 9 calls 13 mismatches 8 ns 178757239
+PASS mut-clamp detected: 1 mismatches, cases 518 calls 518 mismatches 1 ns 111661469
+PASS mut-zero detected: 518 mismatches, cases 518 calls 518 mismatches 518 ns 114987192
+PASS mut-canon detected: 34 mismatches, cases 518 calls 518 mismatches 34 ns 90900848
+TIME low-weight scalar (clamped weight 1): 400 calls, 70988717 ns, 177471 ns per call
+TIME high-weight scalar (clamped weight 252): 400 calls, 70976765 ns, 177441 ns per call
+X25519 PASS vectors=531 (wycheproof=518) mutants=7/7

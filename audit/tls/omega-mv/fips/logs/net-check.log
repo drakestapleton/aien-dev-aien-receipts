@@ -1,0 +1,51 @@
+omc sha256=2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f http.om sha256=da9b48f670bd8965a917b355e3614956bf7734621cbc6933b7988a4c37a1cde1 notls.om sha256=f6d30fb97893b795338a447ada6be447755250c4a9d479c4a019ac7d8ee166eb
+corpus sha256=549987508fdf312b67c29a2f0147948e266bca976347a942fe09dadb7eeabcae cases=1605 hand=105 fuzz=1500 parse.src=7724d29757a4fea1e2ec955dc3b4ecb8244409e3e022cdcd879d3081812092ca parse.bin=19cd51e1c7c5b370c27026c8a93b62991260d5d9ea9f36e16a966149c3e28187
+http.client parity on responses: agree=275 both_reject=104 reference_stricter=327 skipped=77
+outcomes: eof=2 err 400=757 err 413=58 err 417=97 err 431=34 err 499=62 err 501=23 err 505=34 ok=538
+HTTP-CORPUS PASS cases=1605
+mutant killed: CL+TE accepted (line 1203)
+mutant killed: chunk size decimal (line 1611)
+mutant killed: field cap off by one (line 1070)
+mutant killed: 304 has a body (line 1252)
+mutant killed: status range (line 1022)
+mutant killed: Expect value ignored (line 1193)
+mutant killed: duplicate TE flag (line 1144)
+mutant killed: HTTP/1.0 read as 1.1 (line 911)
+mutant killed: close body cap (line 1460)
+mutant killed: bare LF accepted (line 760)
+mutant killed: F4 chunk framing uncapped (line 1520)
+HTTP-MUTANTS PASS killed=11/11
+live.src=87920557646722bdd9f4d77a65141355a4b074f7f2c0d5df214b4fe3a450433c live.bin=020d3484c046a35ab713d22cca92b4ea485c536102ceb1be9048aa1667132c0d rc=0
+HTTP-LIVE PASS
+live mutant killed: head deadline never armed (line 726, exit 53)
+live mutant killed: hclose leaks the descriptor (line 564, exit 19)
+live mutant killed: SSE data CR not a line break (line 2286, exit 70)
+live mutant killed: chunk-size digit mask (line 1755, exit 12)
+live mutant killed: F1 no body deadline after the head (line 859, exit 49)
+live mutant killed: F2 Content-Length overrun buffered (line 1787, exit 38)
+live mutant killed: F3 100 Continue keyed on HWLEN (line 1396, exit 19)
+HTTP-LIVE-MUTANTS PASS killed=7/7
+sse_server src=b800a178fedd50c3852a66ac6ad55ce043060f2ea55aa899f7056ccb747eefc5 bin=92159734fd529f6e8da949cff3235083122e8905fd706bbd53fe0ef75dde099f; sse_client src=7cbfaf8f03326c2087f3aed92423123e06242f9cacd34917b496f05ada7a9d61 bin=1da72560966b0624f9918a5e3b216c89b6e6d8edab10e3b008a14313cee873ba
+HTTP-E2E PASS connections=9 (curl, http.client, raw, sse_client)
+https notls control: nosup exit 0
+https notls mutant killed: htlsrecv ret 0 (notls.om line 7, exit 1)
+https.src=faaa06bf25917757057773ba3c1f841dbe358b684ccb4053952a041273b75e5b https.bin=37f954ef0d544aa5878d597cd3844d7922a00afea93ac50497904c06716b1563 https.om sha256=c5dbb4459b881a41f07e6ca3cc1e00b459c560a5c8e38bdf803d1ff10c25d0b1
+https row small body                                           rc=0 status=200 err=None body=6 -> ok
+https row 300 KiB Content-Length body                          rc=0 status=200 err=None body=307200 -> ok
+https row chunked body                                         rc=0 status=200 err=None body=100000 -> ok
+https row close-delimited body (close_notify ends it)          rc=0 status=200 err=None body=50000 -> ok
+https row truncation: TCP close without close_notify is an error rc=4 status=200 err=-604 body=10 -> ok
+https row silent server: idle limit through tls_deadline       rc=4 status=None err=-110 body=0 -> ok
+https row wrong name in the certificate                        rc=4 status=None err=-617 body=0 -> ok
+https row leaf of an untrusted root                            rc=4 status=None err=-617 body=0 -> ok
+https row openssl s_server -www (HTTP/1.0, close-delimited)    rc=0 status=200 body=3997 -> ok
+HTTPS-ROWS PASS rows=9
+https mutant killed: http.om: read dispatch to TLS gone (http.om line 388, by row 'small body')
+https mutant killed: https.om: head read error taken as end of stream (https.om line 109, by row 'silent server: idle limit through tls_deadline')
+https mutant killed: https.om: body truncation taken as end of stream (https.om line 126, by row 'truncation: TCP close without close_notify is an error')
+https mutant killed: https.om: http.om wait policy not given to TLS (https.om line 95, by row 'silent server: idle limit through tls_deadline')
+https mutant killed: https.om: records not written (https.om line 146, by row 'small body')
+HTTPS-MUTANTS PASS killed=5/5
+HTTPS-LIVE NOT_RUN (set TLS_NET=1 for two live read-only GETs)
+HTTPS PASS
+HTTP-CHECK PASS

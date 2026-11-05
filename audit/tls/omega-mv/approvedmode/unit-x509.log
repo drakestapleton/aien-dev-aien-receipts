@@ -1,0 +1,40 @@
+omc     sha256 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+library sha256 193a8cd93638d85e4256d4d298ea00bb1c60d9e154efe81dd2f88827f093f8be (70 functions)
+driver  sha256 68ac1629bbb735399ad0a459e77d16463441e02aeffd717b6f74a6114c6acf3a
+PASS cases.txt: x509 driver: 187 checks, 0 failed
+PASS fuzz fuzz_rsa n=300 rejected=300
+PASS fuzz fuzz_ec n=300 rejected=300
+PASS fuzz fuzz_pss n=200 rejected=200
+openssl OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)
+DIFF wildcard_partial x509=reject openssl=accept 
+DIFF no_san x509=reject openssl=accept 
+DIFF name_constraints_critical x509=reject openssl=accept 
+DIFF depth_8_intermediates x509=reject openssl=accept 
+DIFF leaf_is_ca x509=reject openssl=accept 
+DIFF leaf_ku_no_digsig x509=reject openssl=accept 
+DIFF rsa_1024_leaf x509=reject openssl=accept 
+DIFF sha1_signed x509=reject openssl=accept 
+DIFF rsassa_pss_key x509=reject openssl=accept 
+DIFF ed25519_key x509=reject openssl=accept 
+DIFF leaf_too_big x509=reject openssl=accept 
+DIFF name_constraints_noncritical x509=reject openssl=accept 
+DIFF rsa_6144_leaf x509=reject openssl=accept 
+DIFF rsa_e_2_32_plus_1_leaf x509=reject openssl=accept 
+DIFF rsa_e_even_leaf x509=reject openssl=accept 
+DIFF rsa_e_1_leaf x509=reject openssl=accept 
+DIFF rsa_6144_intermediate x509=reject openssl=accept 
+DIFF rsa_e_2_32_plus_1_intermediate x509=reject openssl=accept 
+PASS mutant name-wildcard-labels detected (2 MISMATCH: wildcard_one_label_parent wild_one_label_parent )
+PASS mutant date-not-after detected (76 MISMATCH: rsa_good rsa_good_apex )
+PASS mutant date-at-not-after detected (1 MISMATCH: at_not_after )
+PASS mutant anchor-self-issued detected (1 MISMATCH: store_intermediate_anchor )
+PASS mutant bc-ca-flag detected (1 MISMATCH: intermediate_not_ca )
+PASS mutant unique-id-order detected (driver trapped, exit 104, after 3 MISMATCH)
+PASS mutant name-constraints-noncritical detected (3 MISMATCH: name_constraints_critical name_constraints_noncritical )
+PASS mutant rsa-modulus-max detected (8 MISMATCH: rsa_6144_leaf rsa_e_2_32_plus_1_leaf )
+PASS mutant rsa-exponent detected (2 MISMATCH: rsa_e_even_leaf rsa_e_1_leaf )
+PASS mutant leaf-size detected (1 MISMATCH: leaf_too_big )
+PASS mutant elemcap detected (driver trapped, exit 104, after 0 MISMATCH)
+PASS mutant expectation detected
+driver checks=187 fuzz-mutations=800
+X509 PASS cases=91 (openssl-parity=73/91) mutants=12/12

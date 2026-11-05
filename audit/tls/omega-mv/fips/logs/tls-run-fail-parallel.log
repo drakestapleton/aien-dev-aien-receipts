@@ -1,0 +1,59 @@
+omc 2c82480596bbdc50cda9626866209ef662d5834f278f839ff4ce0250c495029f
+sha2.om 5cf0f98116def6917d3a373f2bd4c3932d46e3ff84d9567bbae9e720366fdb33
+hkdf.om 5c3ce5f67627f89ce42961c3076c556d16a2eb6c72d704ff68e13b2819333778
+drbg.om 3d5f866a6d1b55cb350d28a5927132031cae819f59dbeb3d53cddaa6e94db0e5
+x25519.om c2a3a01d6cffff95cbaa130a586ca8f7365fb56c67ec1b2f4920eceebfed23f5
+chacha.om 8431257bc8e83474983c572cfdfa7f8f4b62a1b867748868e88fbc9c1b37d3af
+aesgcm.om b19d8ce88fc65eb0e69e51f52f3af70b9c46c4bfbbc84004d43e536bf4ced17f
+ec.om 909f37c797e187bd0663bde9f57c75d6ce41eb2c9726a6b50d6fc714e424c060
+rsa.om 07414c1104f73f3f0d815ce8a7af9e736233c633f4a2ea080e20307ea1919c11
+x509.om 193a8cd93638d85e4256d4d298ea00bb1c60d9e154efe81dd2f88827f093f8be
+fips.om e9f8127b9f5b3de7ba699a44e52ef312623b6403c9af626d0bb32a656acbd2c6
+tls.om a9524d7ab8a15f29835a01e9ae4934839617f8e8eb5e693a5b854ab6e8530181
+PASS rfc8448: tls kat: 24 checks, 0 failed
+PASS expectation mutant detected: 2 mismatches
+PASS mutant label c hs traffic detected: 5 mismatches
+PASS mutant nonce ignores seq detected: 1 mismatches
+PASS mutant label length detected: 21 mismatches
+PASS mutant finished key detected: 2 mismatches
+PASS dns: dns unit: 23 checks, 0 failed
+PASS mutant dns flags only QR detected: 4 mismatches
+PASS mutant dns owner ignored detected: 6 mismatches
+PASS mutant dns label cap gone detected: trap (exit 104)
+PASS mutant dns_a4 name length unchecked detected: trap (exit 103)
+PASS dit: hwdit=1 cpuinfo=1
+PASS mutant auxv key detected: hwdit=-1
+FAIL interop:
+FAIL | fakesrv: ok                  | expect OK                                                           | got  (exit 3)
+FAIL | fakesrv: empty50             | expect OK                                                           | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: ccslate             | expect TLSERR TLS_ERR_UNEXPECTED_MESSAGE detail 0 (exit 17)         | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: cvbad               | expect TLSERR TLS_ERR_CERTIFICATE_VERIFY                            | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: cvkey               | expect TLSERR TLS_ERR_CERTIFICATE_VERIFY                            | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: closehs             | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 0 (exit 31)             | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: closepre            | expect TLSERR TLS_ERR_ALERT_RECEIVED detail 0 (exit 31)             | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: kuexact [5,0,0]     | expect OK                                                           | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: kuover [5,0,0]      | expect TLSERR TLS_ERR_SEQUENCE_LIMIT detail 0 (exit 38)             | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: kurot [5,0,0]       | expect OK                                                           | got  (exit 3)
+FAIL | fakesrv: kuw:8 [8,0,1]       | expect OK                                                           | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+FAIL | fakesrv: slowsh [0,10000,0]  | expect OK                                                           | got TLSERR TLS_ERR_IO detail 0 (exit 12)
+INTEROP FAIL rows=44
+PASS mutant chain result ignored detected: 25 rows fail
+PASS mutant CertificateVerify ignored detected: 2 rows fail
+PASS mutant CCS count not checked detected: 4 rows fail
+PASS mutant close revives failed detected: 35 rows fail
+PASS mutant read record cap gone detected: 2 rows fail
+PASS mutant handshake record cap gone detected: 1 rows fail
+PASS mutant handshake close_notify unmapped detected: 2 rows fail
+PASS mutant version not checked detected: 1 rows fail
+PASS mutant record MAC ignored detected: 1 rows fail
+PASS mutant session id not checked detected: 1 rows fail
+PASS mutant read record limit gone detected: 1 rows fail
+PASS mutant write KeyUpdate not sent detected: 1 rows fail
+PASS mutant write limit and KeyUpdate gone detected: 1 rows fail
+PASS mutant handshake budget not armed detected: 1 rows fail
+PASS residue: RESIDUE PASS secrets=18 hs_only=12
+PASS mutant close keeps the traffic secrets detected: 2 residues
+PASS mutant handshake secrets kept after Finished detected: 4 residues
+PASS mutant shared secret kept detected: 1 residues
+NOT_RUN network parity (set TLS_NET=1)
+TLS FAIL vectors=24 dns=23 dit=1 interop=44 residue=PASS net=NOT_RUN mutants=27/27
