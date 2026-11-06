@@ -33,7 +33,7 @@ sha256sum aien-architecture/1a3594340c70969c245554b07062efd8ead8a026/bundle.json
 
 # Replay the receipt index (needs GitHub access, Git and OpenSSL 3); last line is the result
 python3 tools/replay_receipt.py replay --all
-# expected last line: INDEX receipt_index.json v1: 16/16 entries reproduce as indexed rc=0
+# expected last line: INDEX receipt_index.json v2: 16/16 entries reproduce as indexed rc=0
 python3 -m unittest discover -s tests -v   # offline
 ```
 

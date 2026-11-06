@@ -58,9 +58,11 @@ signed output, so anyone can read and re-verify a bundle with the public key.
 [`index/receipt_index.json`](index/receipt_index.json) lists the receipts that may be cited, from
 this shelf and from `aien-dev/omega-evidence`, with pinned commits, live SHA-256 digests, the
 correction that applies and the effective verdict. `tools/replay_receipt.py replay --all`
-refetches every entry and refuses any drift. A correction file outranks the historical status,
-so the omega-evidence M8 and M9 receipts are indexed as `REFUSED_UNSUPPORTED_PROVENANCE`. The
-admission check is described in [`docs/receipt-index.md`](docs/receipt-index.md).
+refetches every entry, checks the shelf HEAD for a correction added later, and refuses any
+drift or any field it does not check. A correction file outranks the historical status, so the
+omega-evidence M8 and M9 receipts are indexed as `REFUSED_UNSUPPORTED_PROVENANCE`. The admission
+check, and the few values taken on trust, are described in
+[`docs/receipt-index.md`](docs/receipt-index.md).
 
 ## How it works / How I built it
 

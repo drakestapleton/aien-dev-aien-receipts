@@ -4,13 +4,17 @@
 `admit` computes one index entry live from pinned commits. `replay` fetches an
 indexed entry again by its pinned commits, checks the shelf bytes against the
 recorded SHA-256, recomputes every other field (correction precedence, bundle
-signature and trust anchor, source provenance) and compares it with the index.
+signature and trust anchor, source provenance, issue_or_gate) and compares it
+with the index. Both also read the current HEAD of the shelf repository and
+refuse an entry when the correction file there differs from the one at the
+pinned commit, and replay refuses any entry or index field it does not know.
 The last line printed is the verdict. Rules: docs/receipt-index.md.
 
 Exit codes for one entry: 0 PASS, 1 FAIL (an authenticated FAIL verdict),
 2 NOT_RUN (an input could not be reached, or a usage error), 3 REJECTED (bytes,
-signature, binding, correction binding or index drift), 4 REFUSED (admission
-refused by a shelf correction or by the source-provenance check).
+signature, binding, correction binding, a newer correction at the shelf HEAD,
+an unknown field or index drift), 4 REFUSED (admission refused by a shelf
+correction or by the source-provenance check).
 `replay --all` exits 0 only when every entry reproduces exactly as indexed.
 
 Needs Python 3, Git and OpenSSL 3 (Ed25519). Repository convention: the only
@@ -24,11 +28,23 @@ import subprocess
 import sys
 import tempfile
 
-INDEX_SCHEMA = "aien.receipt-index.v1"
+INDEX_SCHEMA = "aien.receipt-index.v2"
 BUNDLE_SCHEMA = "aien-verification-bundle/1"
 CORRECTION_SCHEMA = "aien.omega-evidence.receipt-correction.v1"
 SHELF_OWNER = "aien-dev"
-KINDS = ("signed-bundle", "omega-qualification-receipt")
+# Each kind lives on exactly one shelf; the index cannot point a kind elsewhere.
+SHELF_REPOS = {"signed-bundle": "aien-dev/aien-receipts", "omega-qualification-receipt": "aien-dev/omega-evidence"}
+KINDS = tuple(SHELF_REPOS)
+# Every field an index may carry. Replay rejects anything else (UNKNOWN_FIELD / SCHEMA).
+INDEX_FIELDS = {"schema", "index_version", "issue", "generated_by", "independence", "admission_check",
+                "precedence", "exit_codes", "scope", "excluded", "generated_utc", "entries"}
+_ENTRY_COMMON = {"id", "kind", "issue_or_gate", "shelf", "source", "correction", "historical_verdict",
+                 "effective_verdict", "effective_basis", "replay"}
+ENTRY_FIELDS = {"signed-bundle": _ENTRY_COMMON | {"trust_anchor", "signature", "gates"},
+                "omega-qualification-receipt": _ENTRY_COMMON}
+# Effective basis of a signed bundle. Taken on trust: see docs/receipt-index.md, "Values taken on trust".
+BUNDLE_BASIS = "authenticated bundle verdict (this shelf has no correction records)"
+UNVERIFIED_ISSUE_BASIS = "UNVERIFIED: not derivable from the receipt; text supplied at admission"
 EXIT = {"PASS": 0, "FAIL": 1, "NOT_RUN": 2, "REJECTED": 3, "REFUSED": 4}
 # DER SubjectPublicKeyInfo prefix for a raw 32-byte Ed25519 public key.
 SPKI_ED25519 = bytes.fromhex("302a300506032b6570032100")
@@ -152,7 +168,7 @@ class Git:
     def __init__(self, cache, remote_base):
         self.cache = cache
         self.base = remote_base.rstrip("/") + "/"
-        self.reached = set()
+        self.heads = {}  # repository -> HEAD commit, read once per run by ls-remote
 
     def _git(self, d, *args):
         try:
@@ -170,15 +186,23 @@ class Git:
                          ("config", "remote.origin.partialclonefilter", "blob:none")):
                 if self._git(d, *args).returncode:
                     raise NotRun(f"cannot initialise cache {d}")
-        if repository not in self.reached:
+        if repository not in self.heads:
             # A reused cache must still talk to the remote named on this run.
             if self._git(d, "remote", "set-url", "origin", self.base + repository).returncode:
                 raise NotRun(f"cannot configure cache {d}")
             r = self._git(d, "ls-remote", "origin", "HEAD")
             if r.returncode:
                 raise NotRun(f"cannot reach {self.base + repository}: {_last(r.stderr)}")
-            self.reached.add(repository)
+            head = r.stdout.decode().split("\t", 1)[0].strip()
+            if not is_hex(head, 40):
+                raise NotRun(f"{self.base + repository} reports no HEAD commit")
+            self.heads[repository] = head
         return d
+
+    def head(self, repository):
+        """The commit the remote's HEAD names at the moment this run first reached it."""
+        self._repo(repository)
+        return self.heads[repository]
 
     def _present(self, d, commit, depth):
         if self._git(d, "cat-file", "-e", commit + "^{commit}").returncode:
@@ -303,10 +327,14 @@ def compute_verdict(entries):
     return "NOT_RUN"
 
 
-def evaluate_bundle(git, shelf, raw):
+def evaluate_bundle(git, shelf, raw, craw):
     parts = shelf["path"].split("/")
     if len(parts) != 3 or parts[2] != "bundle.json" or not is_hex(parts[1], 40):
         raise Rejected("PATH_BINDING", f"{shelf['path']} is not <repo>/<sha>/bundle.json")
+    if craw is not None:
+        # BUNDLE_BASIS asserts that this shelf has no correction records; refuse rather than ignore one.
+        raise Rejected("CORRECTION_UNSUPPORTED", f"{correction_path(shelf['path'])} exists; bundle corrections"
+                       " have no admission rule yet")
     source = {"repository": f"{SHELF_OWNER}/{parts[0]}", "commit": parts[1]}
     b = parse_json(raw, shelf["path"])
     entries = validate_bundle(b)
@@ -347,7 +375,10 @@ def evaluate_bundle(git, shelf, raw):
     computed = compute_verdict(entries)
     if computed != b["verdict"]:
         raise Rejected("VERDICT_INCONSISTENT", f"declared {b['verdict']}, computed {computed}")
+    gates = [e[0] for e in entries if e[1]]
     return {
+        "issue_or_gate": {"value": f"{source['repository']} required gates: {', '.join(gates) or 'none'}",
+                          "basis": "bundle repository and the gate of every required check", "verified": True},
         "source": source,
         "trust_anchor": {"repository": source["repository"], "commit": base,
                          "rule": "first parent of the source commit", "verify_pub": pub, "always": required},
@@ -357,37 +388,49 @@ def evaluate_bundle(git, shelf, raw):
         "correction": None,
         "historical_verdict": b["verdict"],
         "effective_verdict": b["verdict"],
-        "effective_basis": "authenticated bundle verdict (this shelf has no correction records)",
+        "effective_basis": BUNDLE_BASIS,
     }
 
 
 # ------------------------------------------------------------- omega receipts
 
-def evaluate_omega(git, shelf, raw, source_repository):
+def omega_issue_or_gate(d):
+    """Issue or gate named by the receipt itself, or None when the receipt names none."""
+    milestone, contract = d.get("milestone"), d.get("contract_id")
+    if not isinstance(milestone, str) or not milestone.strip():
+        return None
+    if isinstance(contract, str) and contract.strip():
+        return {"value": f"Omega {milestone} qualification ({contract})",
+                "basis": "receipt fields milestone and contract_id", "verified": True}
+    return {"value": f"Omega {milestone} qualification", "basis": "receipt field milestone", "verified": True}
+
+
+def evaluate_omega(git, shelf, raw, source_repository, craw):
     d = parse_json(raw, shelf["path"])
     _schema(isinstance(d, dict), "receipt must be an object")
+    # The receipts do not name their source repository; it is taken from the index (docs, "Values taken on trust").
+    _schema(isinstance(source_repository, str) and source_repository.startswith(SHELF_OWNER + "/")
+            and source_repository.count("/") == 1, f"source.repository must be {SHELF_OWNER}/<name>")
     historical = d.get("status")
     if historical != ADMITTED_HISTORICAL_STATUS:
         raise Rejected("UNSUPPORTED_STATUS", f"status {historical!r} is not {ADMITTED_HISTORICAL_STATUS!r}")
     correction = None
-    if shelf["path"].endswith(".json"):
-        cpath = shelf["path"][:-len(".json")] + ".correction.json"
-        craw = git.read(shelf["repository"], shelf["commit"], cpath)
-        if craw is not None:
-            c = parse_json(craw, cpath)
-            _schema(isinstance(c, dict) and c.get("schema") == CORRECTION_SCHEMA, f"{cpath} schema")
-            corr = c.get("corrects") or {}
-            if (corr.get("repository"), corr.get("path"), corr.get("sha256")) != (
-                    shelf["repository"], shelf["path"], sha256(raw)):
-                raise Rejected("CORRECTION_UNBOUND", f"{cpath} does not name these receipt bytes")
-            disp = c.get("disposition") or {}
-            _schema(isinstance(disp.get("supersedes_historical_status_for_admission"), bool)
-                    and isinstance(disp.get("qualification_claim"), str), f"{cpath} disposition malformed")
-            correction = {"path": cpath, "sha256": sha256(craw), "correction_id": c.get("correction_id"),
-                          "recorded_on": c.get("recorded_on"),
-                          "supersedes_historical_status_for_admission":
-                              disp["supersedes_historical_status_for_admission"],
-                          "qualification_claim": disp["qualification_claim"]}
+    if craw is not None:
+        cpath = correction_path(shelf["path"])
+        c = parse_json(craw, cpath)
+        _schema(isinstance(c, dict) and c.get("schema") == CORRECTION_SCHEMA, f"{cpath} schema")
+        corr = c.get("corrects") or {}
+        if (corr.get("repository"), corr.get("path"), corr.get("sha256")) != (
+                shelf["repository"], shelf["path"], sha256(raw)):
+            raise Rejected("CORRECTION_UNBOUND", f"{cpath} does not name these receipt bytes")
+        disp = c.get("disposition") or {}
+        _schema(isinstance(disp.get("supersedes_historical_status_for_admission"), bool)
+                and isinstance(disp.get("qualification_claim"), str), f"{cpath} disposition malformed")
+        correction = {"path": cpath, "sha256": sha256(craw), "correction_id": c.get("correction_id"),
+                      "recorded_on": c.get("recorded_on"),
+                      "supersedes_historical_status_for_admission":
+                          disp["supersedes_historical_status_for_admission"],
+                      "qualification_claim": disp["qualification_claim"]}
     field = next((f for f in SOURCE_COMMIT_FIELDS if is_hex(d.get(f), 40)), None)
     commit = d[field] if field else None
     resolves = bool(commit) and git.has_commit(source_repository, commit)
@@ -418,6 +461,7 @@ def evaluate_omega(git, shelf, raw, source_repository):
     else:
         effective, basis = "PASS", "historical status; named source commit resolves and source digests match"
     return {
+        "issue_or_gate": omega_issue_or_gate(d),
         "source": {"repository": source_repository, "commit_field": field, "commit": commit,
                    "commit_resolves": resolves, "receipt_commit": receipt_commit, "artifacts": artifacts,
                    "source_check": "PASS" if source_ok else "FAIL"},
@@ -430,15 +474,37 @@ def evaluate_omega(git, shelf, raw, source_repository):
 
 # ------------------------------------------------------------- admit / replay
 
-def evaluate(git, kind, shelf_loc, source_repository, raw):
-    shelf = {"repository": shelf_loc["repository"], "commit": shelf_loc["commit"], "path": shelf_loc["path"],
-             "sha256": sha256(raw), "bytes": len(raw)}
-    if kind == "signed-bundle":
-        out = evaluate_bundle(git, shelf, raw)
-    elif kind == "omega-qualification-receipt":
-        out = evaluate_omega(git, shelf, raw, source_repository)
-    else:
+def correction_path(path):
+    return path[:-len(".json")] + ".correction.json"
+
+
+def evaluate(git, kind, shelf_loc, source_repository, raw, stated_issue=None):
+    """Recompute an entry. stated_issue is used only when the receipt names no issue or gate."""
+    if kind not in KINDS:
         raise Rejected("SCHEMA", f"unknown kind {kind!r}")
+    repo, commit, path = shelf_loc["repository"], shelf_loc["commit"], shelf_loc["path"]
+    if repo != SHELF_REPOS[kind]:
+        raise Rejected("SHELF_REPOSITORY", f"{kind} receipts live in {SHELF_REPOS[kind]}, not {repo}")
+    _schema(isinstance(path, str) and path.endswith(".json"), "shelf.path must name a .json file")
+    shelf = {"repository": repo, "commit": commit, "path": path, "sha256": sha256(raw), "bytes": len(raw)}
+    # A correction may land after the pinned commit. The one at the shelf HEAD must be the one pinned.
+    cpath = correction_path(path)
+    craw = git.read(repo, commit, cpath)
+    head = git.head(repo)
+    at_head = craw if head == commit else git.read(repo, head, cpath)
+    if at_head != craw:
+        state = "is absent" if at_head is None else f"has sha256 {sha256(at_head)}"
+        pinned = "absent" if craw is None else f"sha256 {sha256(craw)}"
+        raise Rejected("STALE_CORRECTION", f"{cpath} at {repo} HEAD {head} {state}; at the indexed commit "
+                       f"{commit} it is {pinned}. Re-admit the entry at the HEAD")
+    if kind == "signed-bundle":
+        out = evaluate_bundle(git, shelf, raw, craw)
+    else:
+        out = evaluate_omega(git, shelf, raw, source_repository, craw)
+    if out["issue_or_gate"] is None:
+        if not isinstance(stated_issue, str) or not stated_issue.strip():
+            raise Rejected("SCHEMA", "the receipt names no issue or gate; supply one (it is recorded UNVERIFIED)")
+        out["issue_or_gate"] = {"value": stated_issue, "basis": UNVERIFIED_ISSUE_BASIS, "verified": False}
     return {"kind": kind, "shelf": shelf, **out}
 
 
@@ -457,12 +523,29 @@ def exit_for(effective):
     return EXIT["NOT_RUN"]
 
 
+def replay_command(eid):
+    return f"python3 tools/replay_receipt.py replay {eid}"
+
+
 def replay_entry(git, entry, override=None):
     """Returns (rc, last line, reproduced). Prints the evidence lines before it."""
     eid = entry.get("id", "?")
     try:
-        shelf = entry["shelf"]
-        print(f"entry: {eid} ({entry['kind']})")
+        kind = entry.get("kind")
+        if kind not in KINDS:
+            raise Rejected("SCHEMA", f"unknown kind {kind!r}")
+        unknown = sorted(set(entry) - ENTRY_FIELDS[kind])
+        if unknown:
+            raise Rejected("UNKNOWN_FIELD", "the index entry carries fields this tool does not check: "
+                           + ", ".join(unknown))
+        if not isinstance(eid, str) or not eid or ":" in eid:
+            raise Rejected("SCHEMA", "id must be a non-empty string without ':'")
+        if entry.get("replay") != replay_command(eid):
+            raise Rejected("INDEX_DRIFT", "recomputed fields differ from the index: replay")
+        shelf = entry.get("shelf")
+        _schema(isinstance(shelf, dict) and all(isinstance(shelf.get(k), str) for k in
+                                                 ("repository", "commit", "path", "sha256")), "shelf malformed")
+        print(f"entry: {eid} ({kind})")
         if override is not None:
             with open(override, "rb") as f:
                 raw = f.read()
@@ -474,26 +557,36 @@ def replay_entry(git, entry, override=None):
         print(f"digest: sha256={got} expected={shelf['sha256']}")
         if got != shelf["sha256"]:
             raise Rejected("DIGEST_MISMATCH", f"sha256 {got} != indexed {shelf['sha256']}")
-        computed = evaluate(git, entry["kind"], shelf, (entry.get("source") or {}).get("repository"), raw)
+        issue = entry.get("issue_or_gate")
+        computed = evaluate(git, kind, shelf, (entry.get("source") or {}).get("repository"), raw,
+                            issue.get("value") if isinstance(issue, dict) else None)
         drift = sorted(k for k in computed if computed[k] != entry.get(k))
         if drift:
             raise Rejected("INDEX_DRIFT", "recomputed fields differ from the index: " + ", ".join(drift))
+        i = computed["issue_or_gate"]
+        if i["verified"]:
+            print(f"issue_or_gate: derived from the {i['basis']}: {i['value']}")
+        else:
+            print(f"issue_or_gate: UNVERIFIED (index text; the receipt names no issue or gate): {i['value']}")
         if computed.get("signature"):
             print(f"signature: {computed['signature']}; key from {computed['trust_anchor']['repository']}"
                   f"@{computed['trust_anchor']['commit']}:.aien/verify.pub")
+        head = git.head(shelf["repository"])
         if computed["correction"]:
             c = computed["correction"]
             print(f"correction: {c['path']} sha256={c['sha256']} supersedes={c['supersedes_historical_status_for_admission']}"
-                  f" claim={c['qualification_claim']}")
+                  f" claim={c['qualification_claim']}; identical at shelf HEAD {head}")
         else:
-            print("correction: none at the shelf commit")
-        if entry["kind"] == "omega-qualification-receipt":
+            print(f"correction: none at the shelf commit or at shelf HEAD {head}")
+        if kind == "omega-qualification-receipt":
             s = computed["source"]
-            print(f"source: {s['repository']}@{s['commit']} resolves={s['commit_resolves']} source_check={s['source_check']}")
+            print(f"source: {s['repository']}@{s['commit']} resolves={s['commit_resolves']} source_check={s['source_check']}"
+                  " (repository taken from the index: the receipt does not name it)")
         eff = computed["effective_verdict"]
         print(f"historical: {computed['historical_verdict']}; effective basis: {computed['effective_basis']}")
         rc = exit_for(eff)
-        return rc, f"REPLAY {eid}: {eff} rc={rc}", True
+        mark = "" if i["verified"] else " issue_or_gate=UNVERIFIED"
+        return rc, f"REPLAY {eid}: {eff} rc={rc}{mark}", True
     except Rejected as e:
         return EXIT["REJECTED"], f"REPLAY {eid}: REJECTED {e} rc={EXIT['REJECTED']}", False
     except NotRun as e:
@@ -505,6 +598,11 @@ def load_index(path):
         idx = parse_json(f.read(), path)
     if not isinstance(idx, dict) or idx.get("schema") != INDEX_SCHEMA or not isinstance(idx.get("entries"), list):
         raise Rejected("SCHEMA", f"{path} is not an {INDEX_SCHEMA} index")
+    unknown = sorted(set(idx) - INDEX_FIELDS)
+    if unknown:
+        raise Rejected("UNKNOWN_FIELD", f"{path} carries index fields this tool does not know: " + ", ".join(unknown))
+    if not isinstance(idx.get("index_version"), int) or not all(isinstance(e, dict) for e in idx["entries"]):
+        raise Rejected("SCHEMA", f"{path}: index_version must be an integer and every entry an object")
     ids = [e.get("id") for e in idx["entries"]]
     if len(ids) != len(set(ids)):
         raise Rejected("SCHEMA", f"{path} repeats an entry id")
@@ -535,7 +633,7 @@ def main(argv=None):
     a.add_argument("--shelf", required=True, help="OWNER/REPO@COMMIT:PATH")
     a.add_argument("--source-repo", help="implementation repository (omega-qualification-receipt)")
     a.add_argument("--id", required=True, help="entry id (no ':' characters)")
-    a.add_argument("--issue-or-gate", required=True, help="tracker issue or gate the receipt evidences")
+    a.add_argument("--issue-or-gate", help="issue or gate, only for a receipt that names none (recorded UNVERIFIED)")
     args = ap.parse_args(argv)
     if args.cmd == "replay" and bool(args.id) == bool(args.all):
         ap.error("replay needs exactly one of ID or --all")
@@ -547,22 +645,31 @@ def main(argv=None):
             shelf = parse_shelf_arg(args.shelf)
             try:
                 raw = fetch_shelf(git, shelf)
-                computed = evaluate(git, args.kind, shelf, args.source_repo, raw)
+                computed = evaluate(git, args.kind, shelf, args.source_repo, raw, args.issue_or_gate)
             except Rejected as e:
                 print(f"ADMIT {args.id}: REJECTED {e} rc=3")
                 return EXIT["REJECTED"]
             except NotRun as e:
                 print(f"ADMIT {args.id}: NOT_RUN {e} rc=2")
                 return EXIT["NOT_RUN"]
-            entry = {"id": args.id, "issue_or_gate": args.issue_or_gate, **computed,
-                     "replay": f"python3 tools/replay_receipt.py replay {args.id}"}
+            if args.issue_or_gate is not None and computed["issue_or_gate"]["verified"]:
+                print(f"ADMIT {args.id}: NOT_RUN --issue-or-gate given, but the receipt names its own "
+                      f"({computed['issue_or_gate']['value']}); drop the option rc=2")
+                return EXIT["NOT_RUN"]
+            if not args.id or ":" in args.id:
+                ap.error("--id must be non-empty and contain no ':'")
+            entry = {"id": args.id, "issue_or_gate": computed["issue_or_gate"], **computed,
+                     "replay": replay_command(args.id)}
             print(json.dumps(entry, indent=1, ensure_ascii=False))
             return 0
         try:
             idx = load_index(args.index)
-        except (OSError, Rejected) as e:
+        except OSError as e:
             print(f"REPLAY: NOT_RUN cannot load index: {e} rc=2")
             return EXIT["NOT_RUN"]
+        except Rejected as e:
+            print(f"REPLAY: REJECTED index {args.index}: {e} rc=3")
+            return EXIT["REJECTED"]
         if args.id:
             entry = next((e for e in idx["entries"] if e.get("id") == args.id), None)
             if entry is None:
