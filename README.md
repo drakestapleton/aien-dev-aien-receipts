@@ -53,7 +53,7 @@ The consuming repository verifies the bundle with `aien-test verify-bundle`, usi
 The signing key never leaves the verification machine. This repository only receives the
 signed output, so anyone can read and re-verify a bundle with the public key.
 
-## How it works / How we built it
+## How it works / How I built it
 
 The [pipeline design record](https://github.com/aien-dev/aien-architecture/blob/efbba982f5c095e3ae71c057b22faaafc11ed84d/docs/adr/0033-aien-verification-pipeline.md)
 identifies the problem: repeated hosted setup and hardware tests that need Spark.
