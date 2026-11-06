@@ -8,7 +8,8 @@ Shared rules: read https://www.aienos.com/agents/RULES.md first. This file adds 
 
 - Applies to the whole repository.
 - `<repo>/<sha>/bundle.json` directories are published data. `<repo>` is the repository name under `aien-dev`; `<sha>` is the full 40-character commit hash that was verified. A commit that has not been verified has no directory.
-- Hand-written files are only `README.md`, `docs/verify-one-bundle.md`, `LICENSE`, `NOTICE` and this file. Documentation changes to those are the only changes an agent may propose.
+- Hand-written files are only `README.md`, `docs/verify-one-bundle.md`, `docs/receipt-index.md`, `tools/replay_receipt.py`, `tests/test_replay.py`, `LICENSE`, `NOTICE` and this file. Documentation changes to those are the only changes an agent may propose.
+- `index/receipt_index.json` is written only by `tools/replay_receipt.py admit` (see `docs/receipt-index.md`). Never type a digest, commit or verdict into it by hand.
 - Bundles are written only by the AIEN verification pipeline on the DGX Spark (commits titled `publish N bundle(s)`). An agent never adds, edits, moves, reformats or deletes a bundle, not even to fix a typo or pretty-print JSON.
 
 ## Installation
@@ -29,6 +30,11 @@ python3 -c "import json,glob; fs=glob.glob('*/*/bundle.json'); [json.load(open(f
 # Fingerprint of the bundle used in the walkthrough
 sha256sum aien-architecture/1a3594340c70969c245554b07062efd8ead8a026/bundle.json
 # expected: cac84aa17376d4349e13d16ba935e349a24db421eaf44cb2bb6be2be5263612a
+
+# Replay the receipt index (needs GitHub access, Git and OpenSSL 3); last line is the result
+python3 tools/replay_receipt.py replay --all
+# expected last line: INDEX receipt_index.json v1: 16/16 entries reproduce as indexed rc=0
+python3 -m unittest discover -s tests -v   # offline
 ```
 
 A bundle's top-level fields are `schema`, `repository`, `commit`, `executor`, `plan`, `checks`, `verdict`, `started_utc`, `finished_utc`, `tree_digest`, `graph_digest`, `receipt_id_scheme` and `signature`. Each entry in `checks` carries `check_id`, `gate`, `backend`, `exactness`, `required`, `status`, `verdict` and `receipt`.
@@ -55,5 +61,6 @@ To verify a bundle, follow `docs/verify-one-bundle.md`: it clones the shelf, the
 
 - `README.md`: layout, how a bundle is checked, rules.
 - `docs/verify-one-bundle.md`: step-by-step verification of one real bundle, with a tamper refusal case.
+- `docs/receipt-index.md`: the receipt index, its admission check (correction precedence, signature, source provenance) and how to replay or admit an entry.
 - ADR 0033, the verification pipeline design: https://github.com/aien-dev/aien-architecture/blob/efbba982f5c095e3ae71c057b22faaafc11ed84d/docs/adr/0033-aien-verification-pipeline.md
 - Verifier source (`bundle.rs`): https://github.com/aien-dev/aien-sovereign-core/blob/c26f4d7ac3156088469b27462390f5b08ef4f436/tools/aien-test/src/bundle.rs

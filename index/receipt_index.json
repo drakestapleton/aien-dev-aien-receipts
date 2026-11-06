@@ -1,0 +1,933 @@
+{
+ "schema": "aien.receipt-index.v1",
+ "index_version": 1,
+ "issue": "DRA-167",
+ "generated_by": "python3 tools/replay_receipt.py admit, one call per entry, run on the Spark by SiReleaseCoord2/Receipts167; every digest, signature check and source check was computed at generation time from the pinned commits",
+ "independence": "The author of this index and the author of tools/replay_receipt.py are the same agent. A replay with this tool by that agent is not an independent review. An independent replay is a different operator following docs/receipt-index.md, or `aien-test verify-bundle` for signed bundles.",
+ "admission_check": "docs/receipt-index.md",
+ "precedence": [
+  "1. Shelf bytes: the file at shelf.repository@shelf.commit:shelf.path must hash to shelf.sha256, else REJECTED.",
+  "2. Shelf correction: an adjacent <basename>.correction.json at the same shelf commit must name these exact bytes (repository, path, sha256), else REJECTED. When it sets supersedes_historical_status_for_admission, its qualification_claim is the effective verdict.",
+  "3. Signed bundles: key from the source commit's first-parent .aien/verify.pub, Ed25519 signature, repository, commit, executor, required gates from .aien/always and verdict algebra must all hold, else REJECTED; the effective verdict is the bundle verdict.",
+  "4. Omega receipts without a superseding correction: the named source commit must resolve upstream and every recoverable source artifact must hash to the recorded digest; otherwise the effective verdict is REFUSED_SOURCE_PROVENANCE. build/ outputs are never recoverable and are not counted.",
+  "5. Replay recomputes every field except id, issue_or_gate and replay; any difference from this file is REJECTED (INDEX_DRIFT)."
+ ],
+ "exit_codes": {
+  "0": "PASS",
+  "1": "FAIL (authenticated FAIL verdict)",
+  "2": "NOT_RUN (input unreachable or usage error)",
+  "3": "REJECTED (integrity, binding, correction binding or index drift)",
+  "4": "REFUSED (shelf correction or source-provenance check)"
+ },
+ "scope": {
+  "omega-evidence": "Root-level receipts with status \"QUALIFIED / PASS\" at aien-dev/omega-evidence@1da6a283d24895ddc1337fb3696c4e2997cd8c56 (M4-M15, M17).",
+  "aien-receipts": "Three signed bundles: the DRA-167 source anchor and the two PASS bundles used as replay references."
+ },
+ "excluded": [
+  {
+   "path": "aien-dev/omega-evidence:omega_accelerator_world_qualification_receipt.json",
+   "reason": "status SILICON_QUALIFIED with a different receipt layout; needs its own admission rule"
+  },
+  {
+   "path": "aien-dev/omega-evidence:omega_blackwell_matmul_stage1_receipt.json",
+   "reason": "no status member; different receipt layout"
+  },
+  {
+   "path": "aien-dev/omega-evidence:omega_blackwell_matmul_stage2_receipt.json",
+   "reason": "no status member; different receipt layout"
+  },
+  {
+   "path": "aien-dev/omega-evidence:m19_m18_stage2_regression.json",
+   "reason": "no status member; regression record, not a qualification receipt"
+  },
+  {
+   "path": "aien-dev/omega-evidence:m19r_gate5_omega_numeric_evidence.json",
+   "reason": "status PASS with a different receipt layout; needs its own admission rule"
+  },
+  {
+   "path": "aien-dev/aien-receipts: other bundles",
+   "reason": "not yet admitted; add each with `tools/replay_receipt.py admit`"
+  }
+ ],
+ "generated_utc": "2026-11-06T20:35:54Z",
+ "entries": [
+  {
+   "id": "spark-rsi@68528eca",
+   "issue_or_gate": "DRA-167 source anchor: spark-rsi required gates (signed FAIL bundle, RSI-TEST FAIL)",
+   "kind": "signed-bundle",
+   "shelf": {
+    "repository": "aien-dev/aien-receipts",
+    "commit": "3d4e338887954a54ca236bc101e37d027167ba84",
+    "path": "spark-rsi/68528eca128ed0f77cde3df7a17d94c7a7e0e1dc/bundle.json",
+    "sha256": "07cf064d63ffd1eefe6fe60393d03e3dd18d6bbe0625e833e8f69ad04558aeb8",
+    "bytes": 2308
+   },
+   "source": {
+    "repository": "aien-dev/spark-rsi",
+    "commit": "68528eca128ed0f77cde3df7a17d94c7a7e0e1dc"
+   },
+   "trust_anchor": {
+    "repository": "aien-dev/spark-rsi",
+    "commit": "7e8bf7da7f2adc0bea7938cc042d8a7873619cc1",
+    "rule": "first parent of the source commit",
+    "verify_pub": "01368e0b02dc1113ae7425ad6ab00fdf5aa7dd97e0690745918a52f051d5cf68",
+    "always": [
+     "CRUMB-VERIFY",
+     "RSI-ZERO-DISK-SECRETS"
+    ]
+   },
+   "signature": "VERIFIED (OpenSSL Ed25519 over canonical bytes without the signature member)",
+   "gates": [
+    {
+     "gate": "CRUMB-VERIFY",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "RSI-CHECK",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "RSI-FMT",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "RSI-TEST",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "FAIL"
+    },
+    {
+     "gate": "RSI-ZERO-DISK-SECRETS",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    }
+   ],
+   "correction": null,
+   "historical_verdict": "FAIL",
+   "effective_verdict": "FAIL",
+   "effective_basis": "authenticated bundle verdict (this shelf has no correction records)",
+   "replay": "python3 tools/replay_receipt.py replay spark-rsi@68528eca"
+  },
+  {
+   "id": "spark-rsi@f72209e6",
+   "issue_or_gate": "spark-rsi required gates (signed PASS bundle)",
+   "kind": "signed-bundle",
+   "shelf": {
+    "repository": "aien-dev/aien-receipts",
+    "commit": "e4f0256f1da4e60cd2e808b830cb65473fc5331c",
+    "path": "spark-rsi/f72209e6da318f4ed36d772cea89f332c68fb9cf/bundle.json",
+    "sha256": "497a18b2232fbd686fa2911ae71ff437242a201343c84bce31e87cce0ade7bd1",
+    "bytes": 2286
+   },
+   "source": {
+    "repository": "aien-dev/spark-rsi",
+    "commit": "f72209e6da318f4ed36d772cea89f332c68fb9cf"
+   },
+   "trust_anchor": {
+    "repository": "aien-dev/spark-rsi",
+    "commit": "5cd6263ff2ed59ead8507bb87efadc18cc6c1738",
+    "rule": "first parent of the source commit",
+    "verify_pub": "01368e0b02dc1113ae7425ad6ab00fdf5aa7dd97e0690745918a52f051d5cf68",
+    "always": [
+     "CRUMB-VERIFY",
+     "RSI-ZERO-DISK-SECRETS"
+    ]
+   },
+   "signature": "VERIFIED (OpenSSL Ed25519 over canonical bytes without the signature member)",
+   "gates": [
+    {
+     "gate": "CRUMB-VERIFY",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "RSI-CHECK",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "RSI-FMT",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "RSI-TEST",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "RSI-ZERO-DISK-SECRETS",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    }
+   ],
+   "correction": null,
+   "historical_verdict": "PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "authenticated bundle verdict (this shelf has no correction records)",
+   "replay": "python3 tools/replay_receipt.py replay spark-rsi@f72209e6"
+  },
+  {
+   "id": "aien-architecture@1a359434",
+   "issue_or_gate": "aien-architecture required gates (signed PASS bundle; docs/verify-one-bundle.md walkthrough)",
+   "kind": "signed-bundle",
+   "shelf": {
+    "repository": "aien-dev/aien-receipts",
+    "commit": "09368f488d228736f8fd2a271a4a691dc3e8cf85",
+    "path": "aien-architecture/1a3594340c70969c245554b07062efd8ead8a026/bundle.json",
+    "sha256": "cac84aa17376d4349e13d16ba935e349a24db421eaf44cb2bb6be2be5263612a",
+    "bytes": 1768
+   },
+   "source": {
+    "repository": "aien-dev/aien-architecture",
+    "commit": "1a3594340c70969c245554b07062efd8ead8a026"
+   },
+   "trust_anchor": {
+    "repository": "aien-dev/aien-architecture",
+    "commit": "efbba982f5c095e3ae71c057b22faaafc11ed84d",
+    "rule": "first parent of the source commit",
+    "verify_pub": "01368e0b02dc1113ae7425ad6ab00fdf5aa7dd97e0690745918a52f051d5cf68",
+    "always": [
+     "CRUMB-VERIFY",
+     "ARCH-DOCTRINE",
+     "ARCH-QUALIFICATION-STATUS"
+    ]
+   },
+   "signature": "VERIFIED (OpenSSL Ed25519 over canonical bytes without the signature member)",
+   "gates": [
+    {
+     "gate": "ARCH-DOCTRINE",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "ARCH-QUALIFICATION-STATUS",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    },
+    {
+     "gate": "CRUMB-VERIFY",
+     "backend": "host",
+     "exactness": "EXACT",
+     "required": true,
+     "status": "run",
+     "verdict": "PASS"
+    }
+   ],
+   "correction": null,
+   "historical_verdict": "PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "authenticated bundle verdict (this shelf has no correction records)",
+   "replay": "python3 tools/replay_receipt.py replay aien-architecture@1a359434"
+  },
+  {
+   "id": "omega-evidence/M4",
+   "issue_or_gate": "Omega MILESTONE 4 — OMEGA_SEMANTICS qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_qualification_receipt.json",
+    "sha256": "1ababfd5c80f6604a3d1a4704a614e906e0666ad3cb3be27e8208485c66f03ab",
+    "bytes": 2570
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "git_commit",
+    "commit": "30bb116cc0ae882668bc09bbd650adc50f28ee8b",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": null,
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "0bd205b5e475ca3af0eca4583bae11da411c23ed5c972f0a5807cf771629beb3",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "spec/canonical-encoding.md",
+      "sha256": "a5ca176ee1aa60db2df607d6ba5f20be37137922bfab43e5f4a11653d63795e1",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "spec/semantic-object.md",
+      "sha256": "c9bc90206508082de365a2244a5f41e2e37c3e7fc7e23754c78e710058303067",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "spec/type-system.md",
+      "sha256": "8bed4af3a71278e7ef8d0ccf8964ca157376fc3305d4efee146f8db270306d3c",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "PASS"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "historical status; named source commit resolves and source digests match",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M4"
+  },
+  {
+   "id": "omega-evidence/M5",
+   "issue_or_gate": "Omega MILESTONE 5 — OMEGA_AARCH64 qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_aarch64_qualification_receipt.json",
+    "sha256": "c095f34c74585e604a91b1f73ebb5199010c49260344e3cfcad94871571a4ad1",
+    "bytes": 3426
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "git_commit",
+    "commit": "2dd41024345d207d57f59d4c7940176b6697b099",
+    "commit_resolves": false,
+    "receipt_commit": {
+     "value": null,
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "8060d19b4de3db643715cfac407246bd5f6747db34639984b64afea7f8d8524d",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/aarch64_decoder.c",
+      "sha256": "d7326177b00094c174822fc128529461293d4f1c44bbe7e11e2668b759262230",
+      "at_source_commit": "commit-unresolved"
+     },
+     {
+      "path": "src/aarch64_encoder.c",
+      "sha256": "da787a2c0b80d83c9c395170c0b4b2dd6e46dc726203608b1c6a73cf53f9b8da",
+      "at_source_commit": "commit-unresolved"
+     },
+     {
+      "path": "src/omega_exec.c",
+      "sha256": "ccd6f43bd5f137b83ff537d874ba220a0dbd2921577d8c9f577f5504cd9890df",
+      "at_source_commit": "commit-unresolved"
+     },
+     {
+      "path": "src/omega_realize.c",
+      "sha256": "d916dea77a6c84be0a705c7781039023f2b76f9e8667fba0692417f77d5e09d0",
+      "at_source_commit": "commit-unresolved"
+     }
+    ],
+    "source_check": "FAIL"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "REFUSED_SOURCE_PROVENANCE",
+   "effective_basis": "index source check (no superseding shelf correction)",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M5"
+  },
+  {
+   "id": "omega-evidence/M6",
+   "issue_or_gate": "Omega MILESTONE 6 — OMEGA_SELF_HOST qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_self_host_qualification_receipt.json",
+    "sha256": "f637f81568cc8b19c6ca8c45a77cb62c6fe666b26ba1a41659bdbe5e99d057f7",
+    "bytes": 2459
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "git_commit",
+    "commit": "34dbe93c3a3e0260e8ca381e6212c648384f8738",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": null,
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "c000315b91a489d33e5c180e426a0263e24ae575549bb478ab62a47c4d214b93",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/aarch64_decoder.c",
+      "sha256": "ac543a0582ba165b7795502f45a0542aef3900cf0485f31b873a85ec00ade37f",
+      "at_source_commit": "mismatch"
+     },
+     {
+      "path": "src/aarch64_encoder.c",
+      "sha256": "adc110ae80aabb94290337c549f3e038cc1b6f2375043700cb5327641f357c3f",
+      "at_source_commit": "mismatch"
+     },
+     {
+      "path": "src/omega_self_host.c",
+      "sha256": "c1090ec33c102e0a655ae11e57bdf0d6f8596c45e96195a21f77f072f01df028",
+      "at_source_commit": "absent"
+     }
+    ],
+    "source_check": "FAIL"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "REFUSED_SOURCE_PROVENANCE",
+   "effective_basis": "index source check (no superseding shelf correction)",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M6"
+  },
+  {
+   "id": "omega-evidence/M7",
+   "issue_or_gate": "Omega MILESTONE 7 — OMEGA_VERIFY qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_verify_qualification_receipt.json",
+    "sha256": "5665637e1df96309d457aa464dbf6475b97a298e67e1709dc02800a350b65ff2",
+    "bytes": 2441
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "git_commit",
+    "commit": "8033c3805ce953d111c58c4da33a60678e15401d",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": null,
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "7eca510b09da41f10b798e2efb7028da97409240f759c984f5a2da8ac466cf8d",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/aarch64_decoder.c",
+      "sha256": "ac543a0582ba165b7795502f45a0542aef3900cf0485f31b873a85ec00ade37f",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_validate.c",
+      "sha256": "ec0e6a629171140302f56474481b5986bf4bee315a621aa7c8584b2cd116d790",
+      "at_source_commit": "mismatch"
+     },
+     {
+      "path": "src/omega_verify.c",
+      "sha256": "b7b3addb2bcad248e1e3e53196745861a918b78239632426b8942fa452438179",
+      "at_source_commit": "absent"
+     }
+    ],
+    "source_check": "FAIL"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "REFUSED_SOURCE_PROVENANCE",
+   "effective_basis": "index source check (no superseding shelf correction)",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M7"
+  },
+  {
+   "id": "omega-evidence/M8",
+   "issue_or_gate": "Omega MILESTONE 8 — OMEGA_PROGRAM_CORE qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_program_core_qualification_receipt.json",
+    "sha256": "2e5febd99ec0bf572f1feb7e0e3a3ce30e3dea3393ec0af944cfd3a7b285e6bd",
+    "bytes": 2708
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "d25349e4bf4a820dbcff0dd6a593d1db7b454a0b",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": "d25349e4bf4a820dbcff0dd6a593d1db7b454a0b",
+     "resolves": true
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "c5f00e435e4f5f9e7b50f37cc0a4c66c919864c696a05639a29197b7bef3e886",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_program.c",
+      "sha256": "04bc92eb3b498a71f5225f1b409cc55309953365d0a990959ec142a452755ccf",
+      "at_source_commit": "mismatch"
+     },
+     {
+      "path": "src/omega_verify.c",
+      "sha256": "b7b3addb2bcad248e1e3e53196745861a918b78239632426b8942fa452438179",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "FAIL"
+   },
+   "correction": {
+    "path": "omega_program_core_qualification_receipt.correction.json",
+    "sha256": "668f1c94ed5bf5e96df1b430afea74b6e927525ae64ed0173dcebcea2a634777",
+    "correction_id": "M8-source-commit-mismatch-2026-10-26",
+    "recorded_on": "2026-10-26",
+    "supersedes_historical_status_for_admission": true,
+    "qualification_claim": "REFUSED_UNSUPPORTED_PROVENANCE"
+   },
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "REFUSED_UNSUPPORTED_PROVENANCE",
+   "effective_basis": "shelf correction M8-source-commit-mismatch-2026-10-26",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M8"
+  },
+  {
+   "id": "omega-evidence/M9",
+   "issue_or_gate": "Omega MILESTONE 9 — OMEGA_SYNTHESIS_V0 qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_synthesis_v0_qualification_receipt.json",
+    "sha256": "efa154f1967df640157bff9047e28f3fc1504570a0d5cdd2e0243f6350bd51b0",
+    "bytes": 3467
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "39905a3eebc3f25c7e3f89d380b06b00539b233a",
+    "commit_resolves": false,
+    "receipt_commit": {
+     "value": "39905a3eebc3f25c7e3f89d380b06b00539b233a",
+     "resolves": false
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "c5f00e435e4f5f9e7b50f37cc0a4c66c919864c696a05639a29197b7bef3e886",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_program.c",
+      "sha256": "04bc92eb3b498a71f5225f1b409cc55309953365d0a990959ec142a452755ccf",
+      "at_source_commit": "commit-unresolved"
+     },
+     {
+      "path": "src/omega_synthesis.c",
+      "sha256": "e02992fad763b8814c7c174fa8601d6881548f5afae5d6c5fab3b3415f222311",
+      "at_source_commit": "commit-unresolved"
+     }
+    ],
+    "source_check": "FAIL"
+   },
+   "correction": {
+    "path": "omega_synthesis_v0_qualification_receipt.correction.json",
+    "sha256": "fcc4d972180eae4db4d98a7d259c8f41acd97340ab7aa49e7b1b6b53575e3489",
+    "correction_id": "M9-named-commit-absent-2026-10-26",
+    "recorded_on": "2026-10-26",
+    "supersedes_historical_status_for_admission": true,
+    "qualification_claim": "REFUSED_UNSUPPORTED_PROVENANCE"
+   },
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "REFUSED_UNSUPPORTED_PROVENANCE",
+   "effective_basis": "shelf correction M9-named-commit-absent-2026-10-26",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M9"
+  },
+  {
+   "id": "omega-evidence/M10",
+   "issue_or_gate": "Omega MILESTONE 10 — OMEGA_LIBRARY_V1 qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_library_v1_qualification_receipt.json",
+    "sha256": "ed145343ccf7537195cc2596b2e89bdb222daa9e38c2657329bde145427a3c61",
+    "bytes": 2254
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "1808ed8663569cececfe4b89bb0f0dc9d023ee4a",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": "pending-receipt-commit",
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "8297770b1050b8dc612b647c49c35ab0b980c2b64196d376d42c2d2b79ad2018",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_library.c",
+      "sha256": "a5a37f73b5eb7f0c69ae92ae9fd3744c31aa228dc212ad49721d7f744501e941",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_library.h",
+      "sha256": "adc279c5a895cc9ad53a48a77e2bffa0c56a2362f1b1b64486f61f4960e8bfee",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "PASS"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "historical status; named source commit resolves and source digests match",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M10"
+  },
+  {
+   "id": "omega-evidence/M11",
+   "issue_or_gate": "Omega MILESTONE 11 — OMEGA_LIBRARY_DISCOVERY qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_library_discovery_qualification_receipt.json",
+    "sha256": "193bfce34119a66d7b8b739347a9ddd910b91348359ef59f61d3f2cad579638d",
+    "bytes": 2439
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "1ee43fbf1c7d588734b80bd0743e5d054aea750b",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": "pending-receipt-commit",
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "eb0f54a5d4ed55343946a65ee0a8472f04e972d3d2a20c96f12158acd88e835c",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_discovery.c",
+      "sha256": "2ac1a2515c884e148b1d3ff6396438777abd931012659bc2cf52f98289606153",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_discovery.h",
+      "sha256": "4d607ec8f6ecb45c3f12cc1b0923fd09a8dc92bb9b7983c8c200d7f2555338b0",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "PASS"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "historical status; named source commit resolves and source digests match",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M11"
+  },
+  {
+   "id": "omega-evidence/M12",
+   "issue_or_gate": "Omega MILESTONE 12 — OMEGA_LIVING_MATVEC qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_living_matvec_qualification_receipt.json",
+    "sha256": "227536387d6bb49683773308c390008b7deed79953fdf0d731aa405fa1916e5b",
+    "bytes": 2351
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "44f645f176f634fdb4b5aac950d31423b2946664",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": "d1e67c4a6cee7cabc0db789fbd8689a616b334ab",
+     "resolves": false
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "c66a3360f7f113566fb6bb83b0926c49be1b753914483563f8cbe14b972db522",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_matvec.c",
+      "sha256": "bf679e9bbadf6a3e02d7d692661f7b1e336370e2e41998f5d88ad860f408a4a1",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_matvec.h",
+      "sha256": "804a19643dbd3e123150e0bd610bab6faa54068710b9ec6ad7cf0bda2523c58c",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "PASS"
+   },
+   "correction": {
+    "path": "omega_living_matvec_qualification_receipt.correction.json",
+    "sha256": "777b4ddef31121710a49b3b18b3b4bd6bde1cd456f897fc7019428c5f4b7ce25",
+    "correction_id": "M12-receipt-commit-absent-2026-10-26",
+    "recorded_on": "2026-10-26",
+    "supersedes_historical_status_for_admission": false,
+    "qualification_claim": "SOURCE_MATCHES_NAMED_COMMIT; RECEIPT_COMMIT_FIELD_FALSE"
+   },
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "historical status; named source commit resolves and source digests match",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M12"
+  },
+  {
+   "id": "omega-evidence/M13",
+   "issue_or_gate": "Omega MILESTONE 13 — OMEGA_MACHINE_GRAPH qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_machine_graph_qualification_receipt.json",
+    "sha256": "d5f154cc31283ea50b1e6e907ffa47e52ef7b45548e306667e4a4d5276e17a10",
+    "bytes": 2371
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "9413558ae113b02484548d1b6cd0d71bf61981b6",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": "pending-receipt-commit",
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "28df863127c8a353bcae8b2721f177d7d40091eacdc4886f65541d3dfe0795ca",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_machine.c",
+      "sha256": "1a64e448237a42a05c82ed8e0c8910f4c5b2dbb5010cb522f683aaceba7f17b7",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_machine.h",
+      "sha256": "ad091205bfbd5f5fa9044602cfbb346f2362534ce7ba5b75d195661c29ac5b10",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "PASS"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "historical status; named source commit resolves and source digests match",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M13"
+  },
+  {
+   "id": "omega-evidence/M14",
+   "issue_or_gate": "Omega MILESTONE 14 — OMEGA_REALIZATION_SYNTHESIS qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_realization_synthesis_qualification_receipt.json",
+    "sha256": "9074be81976d39fc43e12c2854cae7ac3f59291c295c5f7c4f1ccd9732529d43",
+    "bytes": 2384
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "c0c8102ecc7f36cb86ab8686e5f1ee08eb59762d",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": "7c07acae88ebeb32e62608bb30bc659a61297943",
+     "resolves": false
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "104410d3569adcefbe642a4d20b5fc7a80518d826c63c1f9b032cdd335f7f52d",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_realize_synth.c",
+      "sha256": "0744c9a709e0e0869c0f8a9d5e2e3a129c4c0df850dfe8e77626ef69bbf83a3c",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_realize_synth.h",
+      "sha256": "bb62ef9d078f2f8efa550f9a4941330b86d4f997d1d8c79bd17282ce7c905d74",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "PASS"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "historical status; named source commit resolves and source digests match",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M14"
+  },
+  {
+   "id": "omega-evidence/M15",
+   "issue_or_gate": "Omega MILESTONE 15 — PHYSICS_ACCELERATOR_LINK qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_accelerator_link_qualification_receipt.json",
+    "sha256": "6d18480c4eb6c3f571acd10939bf7f5a99639dccdd17ee1794a7653039dccd2f",
+    "bytes": 2575
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "625640f612aee55be0d7cf67d744c27d904c6bc3",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": null,
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "545d4c61acbb9db5f767c630cfe57a23471515def897db38d626518f42489e9e",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_accelerator.c",
+      "sha256": "8399927e9d0c73fe033d705703bf1207f198e4c0f218cf7dfb435404b0741a0e",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_accelerator.h",
+      "sha256": "ed2bada853ae4411872fc79dce381ff7d4db1077294d1717d03d26e2462ecab4",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "PASS"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "historical status; named source commit resolves and source digests match",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M15"
+  },
+  {
+   "id": "omega-evidence/M17",
+   "issue_or_gate": "Omega MILESTONE 17: OMEGA_BLACKWELL_VECTOR qualification",
+   "kind": "omega-qualification-receipt",
+   "shelf": {
+    "repository": "aien-dev/omega-evidence",
+    "commit": "1da6a283d24895ddc1337fb3696c4e2997cd8c56",
+    "path": "omega_blackwell_vector_qualification_receipt.json",
+    "sha256": "b22542bbdbba349b878e9e177cf6053959706df7d3effccf7ad5a7002bc994a5",
+    "bytes": 4011
+   },
+   "source": {
+    "repository": "aien-dev/omega-mv",
+    "commit_field": "qualified_implementation_commit",
+    "commit": "27971cda951800c6c6d42201890de67dea0d532e",
+    "commit_resolves": true,
+    "receipt_commit": {
+     "value": null,
+     "resolves": null
+    },
+    "artifacts": [
+     {
+      "path": "build/omegatool",
+      "sha256": "cbc0bda516b0375c4332a081ed742e3bb593dc167e5e030a06f608d0683fa697",
+      "at_source_commit": "not-recoverable (build output)"
+     },
+     {
+      "path": "src/omega_blackwell_encoder.c",
+      "sha256": "07246381b752ca92cc2d027302a01cdf5eee7c12d5754ee368b42185f49bd784",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_blackwell_encoder.h",
+      "sha256": "c1117f24d3a146ffb9ed9ece80ec6a5d248da64ca5a2f1aaed73b84133372f40",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_blackwell_qmd.c",
+      "sha256": "853005916a1a76c82601d2ab19e30bfe9c6a6ac7b5cacd4a157abb83316d9e57",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_blackwell_qmd.h",
+      "sha256": "4e4d8413d960c102a2f9310e0b8602622e3fe278a946a8bcd878baecc1b02c68",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_blackwell_realize.c",
+      "sha256": "9a5949d2a53b2623c592a116df6d9102a8f5e66dbe058d58d07283b5bec57cef",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_blackwell_realize.h",
+      "sha256": "54723c3473f8dfd4b0f565cbcf2239822a1b3a75e5760ffac921bd3bbd28c71f",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_blackwell_submit.c",
+      "sha256": "42173cb81eeb3cc97dbdd22215ed6c17a43bd04cc68e5b70717d67ee17dc9991",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_blackwell_submit.h",
+      "sha256": "605149c9ef0b90d553f38852e1458aac4e30c892c74ad21532728268ab200fac",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_vector.c",
+      "sha256": "9e4f4622080494b1cf701f0d1c220979785c630cf8317ce44d68bdf58b5b47b5",
+      "at_source_commit": "match"
+     },
+     {
+      "path": "src/omega_vector.h",
+      "sha256": "7526e6849f33dcffc3c6420f0cdc2c86022a094117f57062d8f4f92886496698",
+      "at_source_commit": "match"
+     }
+    ],
+    "source_check": "PASS"
+   },
+   "correction": null,
+   "historical_verdict": "QUALIFIED / PASS",
+   "effective_verdict": "PASS",
+   "effective_basis": "historical status; named source commit resolves and source digests match",
+   "replay": "python3 tools/replay_receipt.py replay omega-evidence/M17"
+  }
+ ]
+}
