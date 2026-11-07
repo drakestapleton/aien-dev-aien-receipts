@@ -1,12 +1,12 @@
 # Receipt index and replay
 
-Linear DRA-167. Status: proposed on branch `feat/dra-167-receipt-index` as a draft pull request.
-It changes the layout of this repository, so under `AGENTS.md` ("Safety and approvals") it needs
-explicit maintainer approval and a change to the ADR 0033 doctrine in `aien-architecture`.
-Drake Stapleton has delegated merge judgment to Queen, the Completion Hive coordinator (DRA-162,
-59767dce); Queen's approval of this pull request is the maintainer approval. The ADR 0033
-amendment is drafted [below](#adr-0033-amendment-draft) and lands in `aien-architecture`
-before this pull request merges. Neither has happened yet.
+Linear DRA-167. Status: merged. The index, tool and tests landed through aien-receipts#12
+(merge `bda984fa92fecef3ad43375b5db402f794acd224`, 2026-11-06), after the ADR 0033 amendment
+[below](#adr-0033-amendment) merged in `aien-architecture` through aien-architecture-mv#379
+(merge `c9dd6f37b6b83fad5e45662ee6ab423a8b74551d`). Maintainer approval for the layout change
+came from Queen, the Completion Hive coordinator, under Drake Stapleton's delegation of merge
+judgment (DRA-162, 59767dce). One independent replay is recorded in
+[Independent replay](#independent-replay-2026-11-07).
 
 `index/receipt_index.json` lists receipts that may be cited as evidence. For each one it pins
 where the bytes live, what they hash to, which correction applies and what verdict follows.
@@ -170,9 +170,9 @@ Also recorded, not deciding:
 
 ## Limits
 
-- **Not independent.** The author of the index and the author of the tool are the same agent. An
-  independent replay needs a different operator, or `aien-test verify-bundle` for signed bundles
-  as in `docs/verify-one-bundle.md`.
+- **Tool replays are not independent.** The author of the index and the author of the tool are
+  the same agent, so `replay` by that agent is not an independent review. The one independent
+  replay so far, and its boundary, is in [Independent replay](#independent-replay-2026-11-07).
 - **Not `aien-test`.** The signature check uses OpenSSL Ed25519, not `ed25519-dalek`
   `verify_strict`. The canonical encoder is a Python port of `evidence::canonical`
   (aien-sovereign-core@c26f4d7ac3156088469b27462390f5b08ef4f436); the tests use that file's
@@ -186,10 +186,51 @@ Also recorded, not deciding:
   They fetch commits, compute SHA-256 and verify Ed25519. No Omega replacement exists; porting
   the check to seeded Omega is an open proposal, in line with `audit/tools`, which is also Python.
 
-## ADR 0033 amendment (draft)
+## Independent replay, 2026-11-07
 
-To be added to `docs/adr/0033-aien-verification-pipeline.md` in `aien-dev/aien-architecture`
-(drafted against ad8d1eb), after the 2026-10-26 amendment and before "Not decided here":
+Run by a different agent from the author of the index and of `tools/replay_receipt.py` (hive card
+t_c85c314e; the index was written by Receipts167 and FixReceipts12). It does not use
+`tools/replay_receipt.py`: shelf bytes come from `git show <shelf.commit>:<path>` and `sha256sum`,
+trust anchors from the source repository, the signed bundle is checked by upstream
+`aien-test verify-bundle` (aien-sovereign-core@c26f4d7ac3156088469b27462390f5b08ef4f436, built
+with `cargo build --locked --offline --release -p aien-test`, rustc 1.98.1, binary sha256
+`a35ea32f666567eb5cb9e0db3c76a19c07eb10f343d4c9be545cb393eedea9d7`), and the correction rule is
+read with `jq`. Index read at this repository's `bda984fa`, file sha256
+`f5613bac8b1061d20cab70047da838e57f0ffb03b8f45ff382e54f30cdc9e8c3`. Spark host, network sandboxed
+off (`bwrap --unshare-net`) for every `aien-test` call.
+
+| Check | Command (abridged) | Observed | Result |
+|---|---|---|---|
+| `aien-architecture@1a359434` bytes | `git show 09368f48:aien-architecture/1a35.../bundle.json \| sha256sum` | `cac84aa1...612a`, equal to `shelf.sha256` | PASS |
+| its trust anchor | `git show efbba982:.aien/verify.pub`, `.aien/always` (first parent of `1a359434`) | key `01368e0b...cf68`, gates CRUMB-VERIFY, ARCH-DOCTRINE, ARCH-QUALIFICATION-STATUS | as indexed |
+| its correction | `bundle.correction.json` at `09368f48` and at shelf HEAD `bda984fa` | none at either | as indexed |
+| signature, binding, verdict | `aien-test verify-bundle bundle.json --repo github.com/aien-dev/aien-architecture --commit 1a35... --pubkey verify.pub --require <always>` | exit 0, `AIEN Verification: PASS (3 checks, 3 required, 0 from cache)` | PASS, equal to `effective_verdict` |
+| control: verdict edited to FAIL | same, on a scratch copy | exit 3, `REJECTED BAD_SIGNATURE` | refused |
+| control: wrong commit (last digit) | same, `--commit 1a35...a020` | exit 3, `REJECTED COMMIT_MISMATCH` | refused |
+| control: wrong key | same, `--pubkey` of 32 zero bytes | exit 3, `REJECTED UNKNOWN_KEY` | refused |
+| control: one appended byte | `sha256sum` of a scratch copy | `e123882e...0d1d`, not `shelf.sha256` | refused |
+| `omega-evidence/M8` bytes | `git show 1da6a283:omega_program_core_qualification_receipt.json \| sha256sum` | `2e5febd9...e6bd`, equal; receipt text says `QUALIFIED / PASS` | PASS |
+| its correction | `git show 1da6a283:<basename>.correction.json`, compared with omega-evidence HEAD | sha256 `668f1c94...4777` as indexed, byte-identical at HEAD `1da6a283`; `corrects` names this repository, path and sha256 | bound |
+| correction precedence | `jq .disposition` | `supersedes_historical_status_for_admission: true`, claim `REFUSED_UNSUPPORTED_PROVENANCE` | effective verdict REFUSED_UNSUPPORTED_PROVENANCE, as indexed; the historical PASS is not admitted |
+| control: one appended byte | `sha256sum` of a scratch copy | differs from `shelf.sha256` | refused |
+
+The tool arm ran in the same session, for comparison only: `replay --all` exit 0, last line
+`INDEX receipt_index.json v2: 16/16 entries reproduce as indexed rc=0`; `replay
+aien-architecture@1a359434 --bytes <copy with one appended byte>` exit 3
+`REJECTED DIGEST_MISMATCH`; `python3 -m unittest discover -s tests` 28 tests OK.
+
+**Independence boundary.** Independent of the index's author and of its tool: different agent,
+different signature implementation (`ed25519-dalek` in `aien-test`, not OpenSSL), digests and
+the correction rule recomputed without the tool. Not independent of the operator: same Spark host
+and same GitHub account as the author, and no independence of model is claimed. It covers two of
+the sixteen entries (one signed bundle, one corrected Omega receipt); the other fourteen were
+replayed only by the tool. It is not hardware qualification.
+
+## ADR 0033 amendment
+
+Landed in `docs/adr/0033-aien-verification-pipeline.md` of `aien-dev/aien-architecture` through
+aien-architecture-mv#379 (merge `c9dd6f37b6b83fad5e45662ee6ab423a8b74551d`). The text as drafted
+here against ad8d1eb, after the 2026-10-26 amendment and before "Not decided here":
 
 > ## Amendment 2026-11-06 (receipt index on the receipts shelf)
 >

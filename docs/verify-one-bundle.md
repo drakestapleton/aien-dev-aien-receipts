@@ -2,9 +2,10 @@
 
 This lesson uses an unchanged, public `aien-architecture` bundle. It does not run
 its gates, sign anything, or need a model, GPU, Spark login, or private key.
-**The official verifier recipe below is not yet reproduced in the documentation
-review environment (Cargo is unavailable).** The separate, narrower OpenSSL
-exercise was reproduced; it is not a substitute for `aien-test verify-bundle`.
+**The official verifier recipe below was reproduced on 2026-11-07** (Linux aarch64,
+rustc 1.98.1, outputs quoted in step 2; see also `docs/receipt-index.md`, "Independent
+replay"). The separate, narrower OpenSSL exercise was reproduced earlier; it is not a
+substitute for `aien-test verify-bundle`.
 
 **Choose a route:** for full bundle verification follow steps 1 and 2. For the
 signature-only exercise without Cargo, follow step 1 and then jump directly to
@@ -110,7 +111,9 @@ AIEN_TEST="$work/verifier/target/release/aien-test"
   --pubkey verify.pub --require "$required"
 ```
 
-Expected (from the pinned CLI and fixture; **not observed here**) is exit 0:
+Observed on 2026-11-07 (Linux aarch64, rustc 1.98.1, aien-test built at the pin above
+with `--locked`, binary sha256 `a35ea32f666567eb5cb9e0db3c76a19c07eb10f343d4c9be545cb393eedea9d7`),
+exit 0:
 
 ```text
 AIEN Verification: PASS (3 checks, 3 required, 0 from cache) bundle cac84aa17376d4349e13d16ba935e349a24db421eaf44cb2bb6be2be5263612a
@@ -143,8 +146,9 @@ printf 'tampered exit=%s\n' "$rc"
 test "$rc" -eq 3
 ```
 
-Expected (not observed here): `AIEN Verification: REJECTED BAD_SIGNATURE: signature
-does not verify over the canonical bytes`, `tampered exit=3`. A refusal is the
+Observed on 2026-11-07, with the same edit made by `jq -c '.checks[0].verdict="FAIL" |
+.verdict="FAIL"'` instead of Python: `AIEN Verification: REJECTED BAD_SIGNATURE: signature
+does not verify over the canonical bytes`, exit 3. A refusal is the
 success condition for this negative test. Do not sign the edited file or replace
 the published receipt. The ordinary unit suite passing would not establish that
 this real-bundle recipe was reproduced.
@@ -198,7 +202,7 @@ Observed with Python 3.12.14 and OpenSSL 3.5.7 on Linux: original signature
 `Signature Verified Successfully`, exit 0; tampered message `Signature Verification
 Failure`, exit 1 (OpenSSL also emits a provider error diagnostic). This establishes
 signature verification for those fixed bytes only. The official verifier's PASS
-and BAD_SIGNATURE outputs above remain expected, not reproduced results.
+and BAD_SIGNATURE outputs above were reproduced separately, on 2026-11-07.
 
 ## Review checklist
 
