@@ -1,3 +1,5 @@
+> **Research. Not part of the SI alpha and not supported.** The supported path is [Sovereign Intelligence](https://github.com/aien-dev/sovereign-intelligence). Why this repository is outside it: [feature freeze, DRA-36](https://github.com/aien-dev/sovereign-intelligence/blob/main/notes/feature-freeze.md).
+
 # aien-receipts
 
 Published signed verification summaries for the AIEN repositories. When the Spark judge (the
